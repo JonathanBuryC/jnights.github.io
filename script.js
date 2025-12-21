@@ -60,25 +60,32 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 function initParallax() {
   const orbs = document.querySelectorAll('.orb');
   const logo = document.querySelector('.logo');
+  let animationFrameId = null;
   
   document.addEventListener('mousemove', (e) => {
-    const mouseX = e.clientX / window.innerWidth;
-    const mouseY = e.clientY / window.innerHeight;
-    
-    // Move orbs
-    orbs.forEach((orb, index) => {
-      const speed = (index + 1) * 20;
-      const x = (mouseX - 0.5) * speed;
-      const y = (mouseY - 0.5) * speed;
-      orb.style.transform = `translate(calc(-50% + ${x}px), calc(-50% + ${y}px))`;
-    });
-    
-    // Subtle logo movement
-    if (logo) {
-      const logoX = (mouseX - 0.5) * 15;
-      const logoY = (mouseY - 0.5) * 15;
-      logo.style.transform = `translate(${logoX}px, ${logoY}px)`;
+    if (animationFrameId) {
+      cancelAnimationFrame(animationFrameId);
     }
+    
+    animationFrameId = requestAnimationFrame(() => {
+      const mouseX = e.clientX / window.innerWidth;
+      const mouseY = e.clientY / window.innerHeight;
+      
+      // Move orbs
+      orbs.forEach((orb, index) => {
+        const speed = (index + 1) * 20;
+        const x = (mouseX - 0.5) * speed;
+        const y = (mouseY - 0.5) * speed;
+        orb.style.transform = `translate(calc(-50% + ${x}px), calc(-50% + ${y}px))`;
+      });
+      
+      // Subtle logo movement
+      if (logo) {
+        const logoX = (mouseX - 0.5) * 15;
+        const logoY = (mouseY - 0.5) * 15;
+        logo.style.transform = `translate(${logoX}px, ${logoY}px)`;
+      }
+    });
   });
 }
 
@@ -188,8 +195,10 @@ function createCursorTrail() {
       circle.style.transform = `scale(${(12 - index) / 12})`;
       
       const nextCircle = circles[index + 1] || circles[0];
-      x += (parseFloat(nextCircle.style.left) - x) * 0.3;
-      y += (parseFloat(nextCircle.style.top) - y) * 0.3;
+      const nextX = parseFloat(nextCircle.style.left) || x;
+      const nextY = parseFloat(nextCircle.style.top) || y;
+      x += (nextX - x) * 0.3;
+      y += (nextY - y) * 0.3;
     });
     
     requestAnimationFrame(animateCircles);
@@ -250,12 +259,9 @@ function initRippleEffect() {
 // LOADING ANIMATION
 // ===========================
 function initLoadingAnimation() {
+  // Add a fade-in class instead of direct opacity manipulation
   window.addEventListener('load', () => {
-    document.body.style.opacity = '0';
-    setTimeout(() => {
-      document.body.style.transition = 'opacity 0.5s ease';
-      document.body.style.opacity = '1';
-    }, 100);
+    document.body.classList.add('loaded');
   });
 }
 
@@ -300,11 +306,11 @@ document.addEventListener('DOMContentLoaded', () => {
 // EASTER EGG: KONAMI CODE
 // ===========================
 (function() {
-  const konamiCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'b', 'a'];
+  const konamiCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'KeyB', 'KeyA'];
   let konamiIndex = 0;
   
   document.addEventListener('keydown', (e) => {
-    if (e.key === konamiCode[konamiIndex]) {
+    if (e.code === konamiCode[konamiIndex]) {
       konamiIndex++;
       if (konamiIndex === konamiCode.length) {
         // Easter egg activated!
