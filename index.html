@@ -2,37 +2,94 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8" />
-  <title>Jnights</title>
+  <title>Jnights - Soirées & Événements Communautaires</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Jnights - Créez des moments inoubliables avec des soirées et événements communautaires uniques">
 
   <!-- CSS -->
   <link rel="stylesheet" href="style.css">
 
-  <!-- Google Font -->
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;500;700&display=swap" rel="stylesheet">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
 
-  <div class="overlay"></div>
+  <!-- Animated Background -->
+  <div class="background">
+    <div class="gradient-overlay"></div>
+    <div class="stars" id="stars"></div>
+    <div class="glow-orbs">
+      <div class="orb orb-1"></div>
+      <div class="orb orb-2"></div>
+      <div class="orb orb-3"></div>
+    </div>
+  </div>
 
+  <!-- Main Content -->
   <main class="container">
-    <img src="logo.png" alt="Jnights logo" class="logo" />
+    <div class="content-wrapper">
+      <!-- Logo -->
+      <div class="logo-container">
+        <img src="logo.png" alt="Jnights logo" class="logo" />
+      </div>
 
-    <h1>JNIGHTS</h1>
-    <p class="subtitle">Soirées & événements communautaires</p>
+      <!-- Title Section -->
+      <div class="title-section">
+        <h1 class="main-title">JNIGHTS</h1>
+        <div class="title-underline"></div>
+        <p class="subtitle">Soirées & Événements Communautaires</p>
+      </div>
 
-    <p class="coming">
-      ✨ Plateforme en préparation ✨
-    </p>
+      <!-- Coming Soon Message -->
+      <div class="coming-soon">
+        <div class="pulse-icon">✨</div>
+        <p class="coming-text">Plateforme en préparation</p>
+        <p class="coming-description">Une nouvelle expérience arrive bientôt</p>
+      </div>
 
-    <a href="mailto:contact@jnights.com" class="cta">
-      Nous contacter
-    </a>
+      <!-- CTA Button -->
+      <div class="cta-container">
+        <a href="mailto:contact@jnights.com" class="cta-button">
+          <span class="cta-text">Nous Contacter</span>
+          <span class="cta-icon">→</span>
+        </a>
+      </div>
+
+      <!-- Features -->
+      <div class="features">
+        <div class="feature-card">
+          <div class="feature-icon">🎉</div>
+          <h3>Événements Uniques</h3>
+          <p>Des soirées inoubliables</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🌟</div>
+          <h3>Communauté</h3>
+          <p>Rencontrez de nouvelles personnes</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🎵</div>
+          <h3>Ambiance Chill</h3>
+          <p>Musique et atmosphère parfaites</p>
+        </div>
+      </div>
+    </div>
   </main>
 
-  <footer>
-    © 2025 Jnights — Tous droits réservés
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-content">
+      <p>© 2025 Jnights — Tous droits réservés</p>
+      <div class="social-links">
+        <a href="#" class="social-link" aria-label="Instagram">📷</a>
+        <a href="#" class="social-link" aria-label="Facebook">📘</a>
+        <a href="mailto:contact@jnights.com" class="social-link" aria-label="Email">✉️</a>
+      </div>
+    </div>
   </footer>
+
+  <!-- JavaScript -->
+  <script src="script.js"></script>
 
 </body>
 </html>
