@@ -402,8 +402,8 @@ function initMusicPlayer() {
 // EASTER EGG: ARROW KEY SEQUENCE
 // ===========================
 function initArrowKeyEasterEgg() {
-  // Konami code-style sequence: Up, Up, Down, Down, Left, Right, Left, Right
-  const arrowSequence = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight'];
+  // Arrow key sequence: Up, Down, Left, Right
+  const arrowSequence = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'];
   let currentIndex = 0;
   let lastKeyTime = Date.now();
   const resetTimeout = 2000; // Reset if no key pressed for 2 seconds
