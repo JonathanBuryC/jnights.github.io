@@ -416,16 +416,14 @@ function initArrowKeyEasterEgg() {
     if (e.key === arrowSequence[currentIndex]) {
       currentIndex++;
       
-      // Visual feedback for correct key press
-      if (currentIndex <= arrowSequence.length) {
-        console.log(`✓ Correct! Progress: ${currentIndex}/${arrowSequence.length}`);
-      }
-      
       // Check if sequence is complete
       if (currentIndex === arrowSequence.length) {
         console.log('🎉 Easter egg activated!');
         showEasterEgg();
         currentIndex = 0; // Reset for next time
+      } else {
+        // Visual feedback for correct key press (but not complete yet)
+        console.log(`✓ Correct! Progress: ${currentIndex}/${arrowSequence.length}`);
       }
     } else if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
       // Wrong arrow key pressed, reset
