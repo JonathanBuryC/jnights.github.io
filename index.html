@@ -25,6 +25,24 @@
     </div>
   </div>
 
+  <!-- Background Music Player -->
+  <div class="music-player">
+    <button id="musicToggle" class="music-toggle" aria-label="Toggle music">
+      <span class="music-icon">🎵</span>
+      <span class="music-text">Music</span>
+    </button>
+    <audio id="backgroundMusic" loop>
+      <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+      Your browser does not support the audio element.
+    </audio>
+  </div>
+
+  <!-- Easter Egg Image -->
+  <div id="easterEggImage" class="easter-egg-image">
+    <div class="easter-egg-close" id="closeEasterEgg">×</div>
+    <img src="https://picsum.photos/600/400?random=1" alt="Easter egg" />
+  </div>
+
   <!-- Main Content -->
   <main class="container">
     <div class="content-wrapper">
