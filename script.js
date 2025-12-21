@@ -311,84 +311,143 @@ function initMusicPlayer() {
   const musicIcon = musicToggle.querySelector('.music-icon');
   let isPlaying = false;
 
-  // Try to autoplay on user interaction
-  const attemptAutoplay = () => {
-    backgroundMusic.play().then(() => {
-      isPlaying = true;
+  // Update UI based on playback state
+  function updateUI(playing) {
+    isPlaying = playing;
+    if (playing) {
       musicToggle.classList.add('playing');
       musicIcon.textContent = '🎵';
-    }).catch(error => {
-      // Autoplay was prevented, user needs to interact
-      console.log('Autoplay prevented:', error);
-      isPlaying = false;
+      musicToggle.setAttribute('aria-label', 'Pause music');
+    } else {
       musicToggle.classList.remove('playing');
       musicIcon.textContent = '🔇';
-    });
+      musicToggle.setAttribute('aria-label', 'Play music');
+    }
+  }
+
+  // Try to autoplay on user interaction
+  const attemptAutoplay = () => {
+    const playPromise = backgroundMusic.play();
+    
+    if (playPromise !== undefined) {
+      playPromise.then(() => {
+        updateUI(true);
+        console.log('Music autoplay started');
+      }).catch(error => {
+        // Autoplay was prevented by browser policy
+        console.log('Autoplay prevented - user interaction required:', error.message);
+        updateUI(false);
+      });
+    }
   };
 
   // Toggle music on button click
-  musicToggle.addEventListener('click', () => {
+  musicToggle.addEventListener('click', (e) => {
+    e.preventDefault();
+    
     if (isPlaying) {
       backgroundMusic.pause();
-      isPlaying = false;
-      musicToggle.classList.remove('playing');
-      musicIcon.textContent = '🔇';
+      updateUI(false);
     } else {
-      backgroundMusic.play().then(() => {
-        isPlaying = true;
-        musicToggle.classList.add('playing');
-        musicIcon.textContent = '🎵';
-      }).catch(error => {
-        console.error('Error playing music:', error);
-      });
+      const playPromise = backgroundMusic.play();
+      
+      if (playPromise !== undefined) {
+        playPromise.then(() => {
+          updateUI(true);
+        }).catch(error => {
+          console.error('Error playing music:', error);
+          updateUI(false);
+        });
+      }
     }
   });
 
-  // Try autoplay on page load
+  // Listen to audio events for state synchronization
+  backgroundMusic.addEventListener('play', () => {
+    updateUI(true);
+  });
+
+  backgroundMusic.addEventListener('pause', () => {
+    updateUI(false);
+  });
+
+  backgroundMusic.addEventListener('ended', () => {
+    updateUI(false);
+  });
+
+  // Handle loading errors
+  backgroundMusic.addEventListener('error', (e) => {
+    console.error('Error loading audio:', e);
+    updateUI(false);
+  });
+
+  // Try autoplay after a short delay (gives page time to load)
   setTimeout(() => {
     attemptAutoplay();
   }, 1000);
 
-  // Resume on user interaction (once)
-  const tryAutoplay = () => {
+  // Attempt autoplay on first user interaction (click or touch)
+  const tryAutoplayOnce = () => {
     if (!isPlaying) {
       attemptAutoplay();
     }
   };
   
-  document.addEventListener('click', tryAutoplay, { once: true });
-  document.addEventListener('touchstart', tryAutoplay, { once: true });
+  // Use { once: true } to automatically remove listeners after first trigger
+  document.addEventListener('click', tryAutoplayOnce, { once: true });
+  document.addEventListener('touchstart', tryAutoplayOnce, { once: true });
 }
 
 // ===========================
 // EASTER EGG: ARROW KEY SEQUENCE
 // ===========================
 function initArrowKeyEasterEgg() {
-  // Simple arrow sequence: Up, Up, Down, Down, Left, Right, Left, Right
+  // Konami code-style sequence: Up, Up, Down, Down, Left, Right, Left, Right
   const arrowSequence = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight'];
   let currentIndex = 0;
+  let lastKeyTime = Date.now();
+  const resetTimeout = 2000; // Reset if no key pressed for 2 seconds
   const easterEggImage = document.getElementById('easterEggImage');
   const closeButton = document.getElementById('closeEasterEgg');
 
   document.addEventListener('keydown', (e) => {
-    // Check if the pressed key matches the current position in sequence
-    if (e.key === arrowSequence[currentIndex]) {
-      currentIndex++;
-      
-      // Check if sequence is complete
-      if (currentIndex === arrowSequence.length) {
-        showEasterEgg();
-        currentIndex = 0; // Reset for next time
-      }
-    } else if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
-      // Wrong arrow key pressed, reset
+    const now = Date.now();
+    
+    // Reset if too much time has passed since last key
+    if (now - lastKeyTime > resetTimeout) {
       currentIndex = 0;
     }
+    
+    // Prevent default behavior for arrow keys to avoid page scrolling during sequence
+    if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
+      
+      // Check if the pressed key matches the current position in sequence
+      if (e.key === arrowSequence[currentIndex]) {
+        e.preventDefault(); // Prevent scrolling only when sequence is being entered
+        currentIndex++;
+        lastKeyTime = now;
+        
+        // Optional: Console feedback for debugging
+        console.log(`Easter egg progress: ${currentIndex}/${arrowSequence.length}`);
+        
+        // Check if sequence is complete
+        if (currentIndex === arrowSequence.length) {
+          showEasterEgg();
+          currentIndex = 0; // Reset for next time
+        }
+      } else {
+        // Wrong arrow key pressed, reset
+        currentIndex = 0;
+        lastKeyTime = now;
+      }
+    }
   });
+
 
   function showEasterEgg() {
     easterEggImage.classList.add('active');
     document.body.style.overflow = 'hidden'; // Prevent scrolling
+    console.log('Easter egg activated! 🎉');
   }
 
   function hideEasterEgg() {
@@ -403,6 +462,7 @@ function initArrowKeyEasterEgg() {
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && easterEggImage.classList.contains('active')) {
       hideEasterEgg();
+      e.preventDefault();
     }
   });
 

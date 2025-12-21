@@ -28,10 +28,12 @@
   <!-- Background Music Player -->
   <div class="music-player">
     <button id="musicToggle" class="music-toggle" aria-label="Toggle music">
-      <span class="music-icon">🎵</span>
+      <span class="music-icon">🔇</span>
       <span class="music-text">Music</span>
     </button>
-    <audio id="backgroundMusic" loop>
+    <audio id="backgroundMusic" loop preload="auto">
+      <!-- Note: For production, replace with licensed 'Bad Romance' by Lady Gaga -->
+      <!-- You need to host your own licensed audio file or use a streaming service -->
       <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
       Your browser does not support the audio element.
     </audio>
