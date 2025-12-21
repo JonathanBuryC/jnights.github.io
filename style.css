@@ -1,0 +1,92 @@
+/* RESET */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* GLOBAL */
+body {
+  font-family: 'Montserrat', sans-serif;
+  height: 100vh;
+  background: radial-gradient(circle at top, #1a1a1a, #000000);
+  color: #ffffff;
+  overflow: hidden;
+}
+
+/* BACKGROUND EFFECT */
+.overlay {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 20% 20%, rgba(255,215,0,0.08), transparent 40%),
+    radial-gradient(circle at 80% 80%, rgba(255,215,0,0.05), transparent 40%);
+  z-index: 0;
+}
+
+/* MAIN */
+.container {
+  position: relative;
+  z-index: 1;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 20px;
+}
+
+/* LOGO */
+.logo {
+  width: 160px;
+  margin-bottom: 30px;
+  filter: drop-shadow(0 0 15px rgba(255,215,0,0.25));
+}
+
+/* TITLE */
+h1 {
+  letter-spacing: 6px;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+/* SUBTITLE */
+.subtitle {
+  font-weight: 300;
+  opacity: 0.85;
+  margin-bottom: 25px;
+}
+
+/* COMING SOON */
+.coming {
+  font-size: 0.95rem;
+  opacity: 0.75;
+  margin-bottom: 35px;
+}
+
+/* CTA */
+.cta {
+  text-decoration: none;
+  padding: 12px 28px;
+  border: 1px solid #ffd700;
+  color: #ffd700;
+  font-weight: 500;
+  letter-spacing: 1px;
+  transition: all 0.3s ease;
+}
+
+.cta:hover {
+  background: #ffd700;
+  color: #000;
+}
+
+/* FOOTER */
+footer {
+  position: absolute;
+  bottom: 15px;
+  width: 100%;
+  text-align: center;
+  font-size: 0.75rem;
+  opacity: 0.5;
+}
