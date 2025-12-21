@@ -304,42 +304,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initLoadingAnimation();
   
   console.log('✨ Jnights.com - Ready!');
-  console.log('💡 Tip: Try the arrow key sequence: ↑ ↑ ↓ ↓ ← → ← →');
 });
-
-// ===========================
-// EASTER EGG: KONAMI CODE
-// ===========================
-(function() {
-  const konamiCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight', 'KeyB', 'KeyA'];
-  let konamiIndex = 0;
-  
-  document.addEventListener('keydown', (e) => {
-    if (e.code === konamiCode[konamiIndex]) {
-      konamiIndex++;
-      if (konamiIndex === konamiCode.length) {
-        // Easter egg activated!
-        document.body.style.animation = 'rainbow 2s ease infinite';
-        setTimeout(() => {
-          document.body.style.animation = '';
-        }, 5000);
-        konamiIndex = 0;
-      }
-    } else {
-      konamiIndex = 0;
-    }
-  });
-  
-  // Rainbow animation
-  const style = document.createElement('style');
-  style.textContent = `
-    @keyframes rainbow {
-      0% { filter: hue-rotate(0deg); }
-      100% { filter: hue-rotate(360deg); }
-    }
-  `;
-  document.head.appendChild(style);
-})();
 
 // ===========================
 // BACKGROUND MUSIC PLAYER
@@ -388,17 +353,18 @@ function initMusicPlayer() {
     attemptAutoplay();
   }, 1000);
 
-  // Resume on user interaction
-  const resumeOnInteraction = () => {
+  // Resume on user interaction (once)
+  document.addEventListener('click', () => {
     if (!isPlaying) {
       attemptAutoplay();
     }
-    document.removeEventListener('click', resumeOnInteraction);
-    document.removeEventListener('touchstart', resumeOnInteraction);
-  };
-
-  document.addEventListener('click', resumeOnInteraction, { once: true });
-  document.addEventListener('touchstart', resumeOnInteraction, { once: true });
+  }, { once: true });
+  
+  document.addEventListener('touchstart', () => {
+    if (!isPlaying) {
+      attemptAutoplay();
+    }
+  }, { once: true });
 }
 
 // ===========================
@@ -418,16 +384,11 @@ function initArrowKeyEasterEgg() {
       
       // Check if sequence is complete
       if (currentIndex === arrowSequence.length) {
-        console.log('🎉 Easter egg activated!');
         showEasterEgg();
         currentIndex = 0; // Reset for next time
-      } else {
-        // Visual feedback for correct key press (but not complete yet)
-        console.log(`✓ Correct! Progress: ${currentIndex}/${arrowSequence.length}`);
       }
     } else if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
       // Wrong arrow key pressed, reset
-      console.log('✗ Wrong key! Sequence reset.');
       currentIndex = 0;
     }
   });
