@@ -287,6 +287,10 @@ document.addEventListener('DOMContentLoaded', () => {
   createStars();
   checkReducedMotion();
   
+  // New features
+  initMusicPlayer();
+  initArrowKeyEasterEgg();
+  
   // Interactive features (only if not reduced motion)
   if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
     initParallax();
@@ -300,6 +304,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initLoadingAnimation();
   
   console.log('✨ Jnights.com - Ready!');
+  console.log('💡 Tip: Try the arrow key sequence: ↑ ↑ ↓ ↓ ← → ← →');
 });
 
 // ===========================
@@ -335,3 +340,124 @@ document.addEventListener('DOMContentLoaded', () => {
   `;
   document.head.appendChild(style);
 })();
+
+// ===========================
+// BACKGROUND MUSIC PLAYER
+// ===========================
+function initMusicPlayer() {
+  const musicToggle = document.getElementById('musicToggle');
+  const backgroundMusic = document.getElementById('backgroundMusic');
+  const musicIcon = musicToggle.querySelector('.music-icon');
+  let isPlaying = false;
+
+  // Try to autoplay on user interaction
+  const attemptAutoplay = () => {
+    backgroundMusic.play().then(() => {
+      isPlaying = true;
+      musicToggle.classList.add('playing');
+      musicIcon.textContent = '🎵';
+    }).catch(error => {
+      // Autoplay was prevented, user needs to interact
+      console.log('Autoplay prevented:', error);
+      isPlaying = false;
+      musicToggle.classList.remove('playing');
+      musicIcon.textContent = '🔇';
+    });
+  };
+
+  // Toggle music on button click
+  musicToggle.addEventListener('click', () => {
+    if (isPlaying) {
+      backgroundMusic.pause();
+      isPlaying = false;
+      musicToggle.classList.remove('playing');
+      musicIcon.textContent = '🔇';
+    } else {
+      backgroundMusic.play().then(() => {
+        isPlaying = true;
+        musicToggle.classList.add('playing');
+        musicIcon.textContent = '🎵';
+      }).catch(error => {
+        console.error('Error playing music:', error);
+      });
+    }
+  });
+
+  // Try autoplay on page load
+  setTimeout(() => {
+    attemptAutoplay();
+  }, 1000);
+
+  // Resume on user interaction
+  const resumeOnInteraction = () => {
+    if (!isPlaying) {
+      attemptAutoplay();
+    }
+    document.removeEventListener('click', resumeOnInteraction);
+    document.removeEventListener('touchstart', resumeOnInteraction);
+  };
+
+  document.addEventListener('click', resumeOnInteraction, { once: true });
+  document.addEventListener('touchstart', resumeOnInteraction, { once: true });
+}
+
+// ===========================
+// EASTER EGG: ARROW KEY SEQUENCE
+// ===========================
+function initArrowKeyEasterEgg() {
+  // Simple arrow sequence: Up, Up, Down, Down, Left, Right, Left, Right
+  const arrowSequence = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight'];
+  let currentIndex = 0;
+  const easterEggImage = document.getElementById('easterEggImage');
+  const closeButton = document.getElementById('closeEasterEgg');
+
+  document.addEventListener('keydown', (e) => {
+    // Check if the pressed key matches the current position in sequence
+    if (e.key === arrowSequence[currentIndex]) {
+      currentIndex++;
+      
+      // Visual feedback for correct key press
+      if (currentIndex <= arrowSequence.length) {
+        console.log(`✓ Correct! Progress: ${currentIndex}/${arrowSequence.length}`);
+      }
+      
+      // Check if sequence is complete
+      if (currentIndex === arrowSequence.length) {
+        console.log('🎉 Easter egg activated!');
+        showEasterEgg();
+        currentIndex = 0; // Reset for next time
+      }
+    } else if (['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(e.key)) {
+      // Wrong arrow key pressed, reset
+      console.log('✗ Wrong key! Sequence reset.');
+      currentIndex = 0;
+    }
+  });
+
+  function showEasterEgg() {
+    easterEggImage.classList.add('active');
+    document.body.style.overflow = 'hidden'; // Prevent scrolling
+  }
+
+  function hideEasterEgg() {
+    easterEggImage.classList.remove('active');
+    document.body.style.overflow = ''; // Restore scrolling
+  }
+
+  // Close button
+  closeButton.addEventListener('click', hideEasterEgg);
+
+  // Close on Escape key
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && easterEggImage.classList.contains('active')) {
+      hideEasterEgg();
+    }
+  });
+
+  // Close on backdrop click
+  easterEggImage.addEventListener('click', (e) => {
+    if (e.target === easterEggImage) {
+      hideEasterEgg();
+    }
+  });
+}
