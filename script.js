@@ -281,8 +281,6 @@ function checkReducedMotion() {
 // INITIALIZE ALL FEATURES
 // ===========================
 document.addEventListener('DOMContentLoaded', () => {
-  console.log('🌟 Jnights.com - Initializing...');
-  
   // Core features
   createStars();
   checkReducedMotion();
@@ -302,8 +300,6 @@ document.addEventListener('DOMContentLoaded', () => {
   initScrollAnimations();
   initRippleEffect();
   initLoadingAnimation();
-  
-  console.log('✨ Jnights.com - Ready!');
 });
 
 // ===========================
@@ -354,17 +350,14 @@ function initMusicPlayer() {
   }, 1000);
 
   // Resume on user interaction (once)
-  document.addEventListener('click', () => {
+  const tryAutoplay = () => {
     if (!isPlaying) {
       attemptAutoplay();
     }
-  }, { once: true });
+  };
   
-  document.addEventListener('touchstart', () => {
-    if (!isPlaying) {
-      attemptAutoplay();
-    }
-  }, { once: true });
+  document.addEventListener('click', tryAutoplay, { once: true });
+  document.addEventListener('touchstart', tryAutoplay, { once: true });
 }
 
 // ===========================
