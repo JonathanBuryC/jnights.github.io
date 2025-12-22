@@ -1,0 +1,21 @@
+{
+  "name": "Jnights - Soirées & Événements Communautaires",
+  "short_name": "Jnights",
+  "description": "Créez des moments inoubliables avec des soirées et événements communautaires uniques",
+  "icons": [
+    {
+      "src": "android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "android-chrome-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "theme_color": "#ff6b35",
+  "background_color": "#0f0520",
+  "display": "standalone",
+  "start_url": "/"
+}
