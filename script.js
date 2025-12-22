@@ -302,6 +302,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // New features
   initMusicPlayer();
   initArrowKeyEasterEgg();
+  initContactForm();
   
   // Interactive features (only if not reduced motion)
   if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
@@ -485,5 +486,89 @@ function initArrowKeyEasterEgg() {
     if (e.target === easterEggImage) {
       hideEasterEgg();
     }
+  });
+}
+
+// ===========================
+// CONTACT FORM MODAL
+// ===========================
+function initContactForm() {
+  const openBtn = document.getElementById('openContactForm');
+  const closeBtn = document.getElementById('closeContactForm');
+  const modal = document.getElementById('contactFormModal');
+  const form = document.getElementById('contactForm');
+
+  // Open modal
+  openBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+  });
+
+  // Close modal
+  function closeModal() {
+    modal.classList.remove('active');
+    document.body.style.overflow = '';
+  }
+
+  closeBtn.addEventListener('click', closeModal);
+
+  // Close on Escape key
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modal.classList.contains('active')) {
+      closeModal();
+    }
+  });
+
+  // Close on backdrop click
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) {
+      closeModal();
+    }
+  });
+
+  // Form validation and submission
+  form.addEventListener('submit', (e) => {
+    // Hide all error messages first
+    document.querySelectorAll('.form-error').forEach(err => err.classList.remove('show'));
+    
+    // Basic validation
+    const name = document.getElementById('name').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const message = document.getElementById('message').value.trim();
+    
+    let hasError = false;
+
+    if (!name) {
+      document.getElementById('nameError').classList.add('show');
+      hasError = true;
+    }
+
+    if (!email) {
+      document.getElementById('emailError').textContent = 'Veuillez entrer votre email';
+      document.getElementById('emailError').classList.add('show');
+      hasError = true;
+    } else {
+      // Email validation
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        document.getElementById('emailError').textContent = 'Veuillez entrer une adresse email valide';
+        document.getElementById('emailError').classList.add('show');
+        hasError = true;
+      }
+    }
+
+    if (!message) {
+      document.getElementById('messageError').classList.add('show');
+      hasError = true;
+    }
+
+    if (hasError) {
+      e.preventDefault();
+      return false;
+    }
+
+    // If validation passes, the form will submit normally to FormSubmit
+    // FormSubmit will handle the redirect via the _next hidden field
   });
 }
