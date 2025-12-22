@@ -259,10 +259,24 @@ function initRippleEffect() {
 // LOADING ANIMATION
 // ===========================
 function initLoadingAnimation() {
-  // Add a fade-in class instead of direct opacity manipulation
+  const preloader = document.getElementById('preloader');
+  
+  // Hide preloader when page is fully loaded
   window.addEventListener('load', () => {
-    document.body.classList.add('loaded');
+    // Add a small delay for better UX
+    setTimeout(() => {
+      preloader.classList.add('hidden');
+      document.body.classList.add('loaded');
+    }, 500);
   });
+  
+  // Fallback: Hide preloader after 3 seconds if load event hasn't fired
+  setTimeout(() => {
+    if (!preloader.classList.contains('hidden')) {
+      preloader.classList.add('hidden');
+      document.body.classList.add('loaded');
+    }
+  }, 3000);
 }
 
 // ===========================
