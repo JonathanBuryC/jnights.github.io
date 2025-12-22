@@ -529,22 +529,42 @@ function initContactForm() {
 
   // Form validation and submission
   form.addEventListener('submit', (e) => {
+    // Hide all error messages first
+    document.querySelectorAll('.form-error').forEach(err => err.classList.remove('show'));
+    
     // Basic validation
     const name = document.getElementById('name').value.trim();
     const email = document.getElementById('email').value.trim();
     const message = document.getElementById('message').value.trim();
+    
+    let hasError = false;
 
-    if (!name || !email || !message) {
-      e.preventDefault();
-      alert('Veuillez remplir tous les champs obligatoires.');
-      return false;
+    if (!name) {
+      document.getElementById('nameError').classList.add('show');
+      hasError = true;
     }
 
-    // Email validation
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
+    if (!email) {
+      document.getElementById('emailError').textContent = 'Veuillez entrer votre email';
+      document.getElementById('emailError').classList.add('show');
+      hasError = true;
+    } else {
+      // Email validation
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        document.getElementById('emailError').textContent = 'Veuillez entrer une adresse email valide';
+        document.getElementById('emailError').classList.add('show');
+        hasError = true;
+      }
+    }
+
+    if (!message) {
+      document.getElementById('messageError').classList.add('show');
+      hasError = true;
+    }
+
+    if (hasError) {
       e.preventDefault();
-      alert('Veuillez entrer une adresse email valide.');
       return false;
     }
 

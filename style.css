@@ -450,16 +450,17 @@ body.loaded {
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   z-index: 3000;
-  display: none;
+  display: flex;
   align-items: center;
   justify-content: center;
   opacity: 0;
-  transition: opacity 0.3s ease;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
 }
 
 .contact-modal.active {
-  display: flex;
   opacity: 1;
+  visibility: visible;
 }
 
 .contact-modal-content {
@@ -619,6 +620,23 @@ body.loaded {
 
 .form-submit-btn:hover .btn-icon {
   transform: translateX(3px);
+}
+
+/* Honeypot field (hidden spam protection) */
+input[name="_honey"] {
+  display: none;
+}
+
+/* Form validation error message */
+.form-error {
+  color: #ff6b6b;
+  font-size: 0.85rem;
+  margin-top: 5px;
+  display: none;
+}
+
+.form-error.show {
+  display: block;
 }
 
 /* Responsive Contact Form */
