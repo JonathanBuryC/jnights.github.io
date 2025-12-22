@@ -624,7 +624,13 @@ body.loaded {
 
 /* Honeypot field (hidden spam protection) */
 input[name="_honey"] {
-  display: none;
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
 }
 
 /* Form validation error message */
