@@ -75,8 +75,17 @@ body.loaded {
   width: 150px;
   height: auto;
   margin-bottom: 30px;
-  animation: logoFloat 2s ease-in-out infinite;
+  animation: preloaderLogoFloat 2s ease-in-out infinite;
   filter: drop-shadow(0 0 30px rgba(255, 107, 53, 0.5));
+}
+
+@keyframes preloaderLogoFloat {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
 }
 
 .preloader-spinner {
