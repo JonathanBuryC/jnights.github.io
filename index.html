@@ -2,133 +2,144 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8" />
-  <title>Jnights - Soirées & Événements Communautaires</title>
+  <title>Jnights — Soirées & Événements près de chez vous</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Jnights - Créez des moments inoubliables avec des soirées et événements communautaires uniques">
+  <meta name="description" content="Jnights : découvrez et rejoignez les meilleures soirées et événements près de chez vous. Filtrez par âge et par ville." />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Jnights — Soirées & Événements" />
+  <meta property="og:description" content="Découvrez les meilleures soirées près de chez vous." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://jnights.com" />
 
   <!-- Favicons -->
-  <link rel="icon" type="image/x-icon" href="favicon.ico">
-  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
-  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
-  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
-  <link rel="icon" type="image/png" sizes="192x192" href="android-chrome-192x192.png">
-  <link rel="icon" type="image/png" sizes="512x512" href="android-chrome-512x512.png">
-  <link rel="manifest" href="site.webmanifest">
-  <meta name="theme-color" content="#ff6b35">
+  <link rel="icon" type="image/x-icon" href="favicon.ico" />
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
+  <link rel="manifest" href="site.webmanifest" />
+  <meta name="theme-color" content="#faf8f5" />
 
-  <!-- CSS -->
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css" />
 
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet" />
 </head>
 <body>
 
   <!-- Preloader -->
   <div id="preloader" class="preloader">
-    <div class="preloader-content">
-      <img src="logo.png" alt="Jnights logo" class="preloader-logo" />
-      <div class="preloader-spinner"></div>
-      <p class="preloader-text">Chargement...</p>
-    </div>
+    <img src="logo.png" alt="Jnights" class="preloader-logo" />
   </div>
 
-  <!-- Animated Background -->
-  <div class="background">
-    <div class="gradient-overlay"></div>
-    <div class="stars" id="stars"></div>
-    <div class="glow-orbs">
-      <div class="orb orb-1"></div>
-      <div class="orb orb-2"></div>
-      <div class="orb orb-3"></div>
-    </div>
-  </div>
-
-  <!-- Background Music Player -->
-  <div class="music-player">
-    <button id="musicToggle" class="music-toggle" aria-label="Toggle music">
-      <span class="music-icon">🔇</span>
-      <span class="music-text">Music</span>
-    </button>
-    <audio id="backgroundMusic" loop preload="auto">
-      <!-- Note: For production, replace with licensed 'Bad Romance' by Lady Gaga -->
-      <!-- You need to host your own licensed audio file or use a streaming service -->
-      <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
-      Your browser does not support the audio element.
-    </audio>
-  </div>
-
-  <!-- Easter Egg Image -->
+  <!-- Easter egg (séquence flèches : ↑ ↓ ← →) -->
   <div id="easterEggImage" class="easter-egg-image">
     <div class="easter-egg-close" id="closeEasterEgg">×</div>
-    <img src="image-easteregg.jpg" alt="Easter egg" />
+    <img src="image-easteregg.jpg" alt="Surprise" />
   </div>
 
-  <!-- Main Content -->
-  <main class="container">
-    <div class="content-wrapper">
-      <!-- Logo -->
-      <div class="logo-container">
-        <img src="logo.png" alt="Jnights logo" class="logo" />
+  <!-- Navbar -->
+  <nav class="navbar" id="navbar">
+    <div class="container nav-inner">
+      <a href="#" class="nav-brand">
+        <img src="logo.png" alt="" />
+        Jnights
+      </a>
+      <div class="nav-links">
+        <a href="#features">Fonctionnalités</a>
+        <a href="#about">À propos</a>
+        <a href="privacy.html">Confidentialité</a>
+        <a href="mailto:admin@jnights.com" class="nav-cta">Nous contacter</a>
       </div>
+    </div>
+  </nav>
 
-      <!-- Title Section -->
-      <div class="title-section">
-        <h1 class="main-title">JNIGHTS</h1>
-        <div class="title-underline"></div>
-        <p class="subtitle">Soirées & Événements Communautaires</p>
+  <!-- Hero -->
+  <header class="hero">
+    <div class="hero-glow"></div>
+    <div class="hero-glow two"></div>
+    <div class="container hero-content">
+      <div class="hero-badge">
+        <span class="dot"></span>
+        Bientôt disponible sur iOS &amp; Android
       </div>
-
-      <!-- Coming Soon Message -->
-      <div class="coming-soon">
-        <div class="pulse-icon">✨</div>
-        <p class="coming-text">Plateforme en préparation</p>
-        <p class="coming-description">Une nouvelle expérience arrive bientôt</p>
-      </div>
-
-      <!-- CTA Button -->
-      <div class="cta-container">
-        <a href="mailto:admin@jnights.com" class="cta-button">
-          <span class="cta-text">Nous Contacter</span>
-          <span class="cta-icon">→</span>
+      <h1>
+        Vivez les meilleures<br />
+        <span class="grad">soirées</span> près de chez vous.
+      </h1>
+      <p class="lead">
+        Jnights réunit les soirées et événements de votre ville.
+        Découvrez, filtrez par âge et par lieu, réservez votre place —
+        le tout dans une seule application.
+      </p>
+      <div class="hero-actions">
+        <a href="mailto:admin@jnights.com" class="btn btn-primary">
+          Être prévenu du lancement →
         </a>
+        <a href="#features" class="btn btn-ghost">Découvrir</a>
       </div>
+    </div>
+  </header>
 
-      <!-- Features -->
-      <div class="features">
+  <!-- Features -->
+  <section id="features">
+    <div class="container">
+      <div class="section-head">
+        <div class="section-tag">Ce que vous pouvez faire</div>
+        <h2>Tout ce qu'il faut pour sortir, au bon endroit.</h2>
+        <p>Une expérience pensée pour découvrir et organiser des événements simplement.</p>
+      </div>
+      <div class="features-grid">
         <div class="feature-card">
-          <div class="feature-icon">🎉</div>
-          <h3>Événements Uniques</h3>
-          <p>Des soirées inoubliables</p>
+          <div class="feature-ico">🔎</div>
+          <h3>Découvrez près de vous</h3>
+          <p>Parcourez les soirées à venir et filtrez par ville et par tranche d'âge pour trouver ce qui vous correspond.</p>
         </div>
         <div class="feature-card">
-          <div class="feature-icon">🌟</div>
-          <h3>Communauté</h3>
-          <p>Rencontrez de nouvelles personnes</p>
+          <div class="feature-ico">🎟️</div>
+          <h3>Réservez votre place</h3>
+          <p>Rejoignez un événement en un geste et gardez vos billets toujours accessibles dans l'application.</p>
         </div>
         <div class="feature-card">
-          <div class="feature-icon">🎵</div>
-          <h3>Ambiance Chill</h3>
-          <p>Musique et atmosphère parfaites</p>
+          <div class="feature-ico">✨</div>
+          <h3>Créez vos événements</h3>
+          <p>Organisateurs : publiez vos soirées, gérez vos participants et développez votre communauté.</p>
         </div>
       </div>
     </div>
-  </main>
+  </section>
+
+  <!-- About / CTA -->
+  <section id="about">
+    <div class="container">
+      <div class="cta-banner">
+        <h2>La nuit commence ici.</h2>
+        <p>Soyez parmi les premiers à rejoindre Jnights dès sa sortie.</p>
+        <a href="mailto:admin@jnights.com" class="btn btn-primary">Nous contacter</a>
+      </div>
+    </div>
+  </section>
 
   <!-- Footer -->
   <footer class="footer">
-    <div class="footer-content">
-      <p>© 2025 Jnights — Tous droits réservés</p>
-      <div class="social-links">
-        <a href="#" class="social-link" aria-label="Instagram">📷</a>
-        <a href="#" class="social-link" aria-label="Facebook">📘</a>
-        <a href="mailto:admin@jnights.com" class="social-link" aria-label="Email">✉️</a>
+    <div class="container">
+      <div class="footer-inner">
+        <div class="footer-brand">
+          <img src="logo.png" alt="" />
+          Jnights
+        </div>
+        <div class="footer-links">
+          <a href="#features">Fonctionnalités</a>
+          <a href="privacy.html">Politique de confidentialité</a>
+          <a href="mailto:admin@jnights.com">Contact</a>
+        </div>
       </div>
+      <p class="footer-copy">© 2026 Jnights — Tous droits réservés.</p>
     </div>
   </footer>
 
-  <!-- JavaScript -->
   <script src="script.js"></script>
-
 </body>
 </html>
