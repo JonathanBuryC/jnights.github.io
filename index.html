@@ -83,13 +83,20 @@
         </div>
       </div>
 
-      <!-- Mockup téléphone (cadre CSS + screenshot de l'app) -->
+      <!-- Mockup téléphone (cadre CSS + carrousel de screenshots) -->
       <div class="hero-phone">
         <div class="phone">
           <div class="phone-notch"></div>
           <div class="phone-viewport">
-            <img src="app-screen.png" alt="Aperçu de l'application Jnights" class="phone-screen" />
+            <img src="app-screen-1.png" alt="Découvrir les soirées" class="phone-screen is-active" data-slide="0" />
+            <img src="app-screen-2.png" alt="Rechercher un événement" class="phone-screen" data-slide="1" />
+            <img src="app-screen-3.png" alt="Détail d'un événement" class="phone-screen" data-slide="2" />
           </div>
+        </div>
+        <div class="phone-dots" id="phoneDots">
+          <span class="dot-indicator is-active" data-dot="0"></span>
+          <span class="dot-indicator" data-dot="1"></span>
+          <span class="dot-indicator" data-dot="2"></span>
         </div>
       </div>
     </div>
