@@ -201,13 +201,14 @@ a {
 }
 .phone {
   position: relative;
-  width: 300px;
+  width: 360px;
   /* hauteur = largeur intérieure × ratio image (2532/1170 ≈ 2.164)
-     pour que l'écran épouse exactement le screenshot, sans bande noire. */
-  height: 624px;
+     pour que l'écran épouse exactement le screenshot, sans bande noire.
+     intérieur = 360 - 2*12 = 336 ; 336 * 2.164 ≈ 727 ; + 2*12 = 751 */
+  height: 751px;
   background: #0a0a0f;
-  border-radius: 46px;
-  border: 11px solid #15151c;
+  border-radius: 52px;
+  border: 12px solid #15151c;
   box-shadow:
     0 0 0 2px #2a2a33,
     0 40px 80px -20px rgba(139, 92, 246, 0.4),
