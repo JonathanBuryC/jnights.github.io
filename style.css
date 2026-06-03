@@ -204,9 +204,10 @@ a {
   height: 570px;
   background: #0a0a0f;
   border-radius: 44px;
-  border: 10px solid #1a1a22;
+  border: 11px solid #15151c;
   box-shadow:
-    0 40px 80px -20px rgba(139, 92, 246, 0.35),
+    0 0 0 2px #2a2a33,
+    0 40px 80px -20px rgba(139, 92, 246, 0.4),
     0 20px 50px -20px rgba(0, 0, 0, 0.6);
   overflow: hidden;
 }
@@ -215,21 +216,26 @@ a {
   top: 0;
   left: 50%;
   transform: translateX(-50%);
-  width: 120px;
-  height: 26px;
-  background: #1a1a22;
+  width: 110px;
+  height: 24px;
+  background: #15151c;
   border-bottom-left-radius: 16px;
   border-bottom-right-radius: 16px;
   z-index: 2;
 }
-.phone-screen {
+/* Fenêtre qui rogne la barre de statut du screenshot : on cache le haut
+   de l'image en la décalant vers le haut dans un conteneur overflow:hidden. */
+.phone-viewport {
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  /* Recadre légèrement vers le bas pour masquer la barre de statut
-     (heure/batterie) du screenshot. */
-  object-position: top;
-  transform: scale(1.06) translateY(2%);
+  overflow: hidden;
+}
+.phone-screen {
+  width: 100%;
+  display: block;
+  /* L'image est plus haute que le cadre ; on la remonte pour masquer
+     la barre de statut (heure/batterie ~ 5% du haut). */
+  margin-top: -5.5%;
 }
 .hero-badge {
   display: inline-flex;
