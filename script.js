@@ -146,7 +146,7 @@ function initPhoneCarousel() {
   };
 
   const start = () => {
-    timer = setInterval(() => show(current + 1), 2000);
+    timer = setInterval(() => show(current + 1), 3000);
   };
   const restart = () => {
     if (timer) clearInterval(timer);
