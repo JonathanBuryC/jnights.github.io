@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Création de compte organisateur — Jnights</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Ouverture de votre invitation organisateur dans l'application Jnights." />
+  <meta name="robots" content="noindex" />
+
+  <link rel="icon" type="image/x-icon" href="favicon.ico" />
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
+  <link rel="stylesheet" href="style.css" />
+  <meta name="theme-color" content="#faf8f5" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet" />
+
+  <style>
+    .signup-card {
+      max-width: 520px;
+      margin: 0 auto;
+      text-align: center;
+      padding: 48px 8px 80px;
+    }
+    .signup-card .logo-badge {
+      width: 84px;
+      height: 84px;
+      border-radius: 22px;
+      margin: 0 auto 28px;
+      display: block;
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+    }
+    .signup-card h1 {
+      margin-bottom: 12px;
+    }
+    .signup-card p {
+      color: #555;
+      line-height: 1.6;
+    }
+    .open-btn {
+      display: inline-block;
+      margin-top: 28px;
+      padding: 15px 34px;
+      border-radius: 999px;
+      background: #111;
+      color: #fff;
+      font-weight: 600;
+      text-decoration: none;
+      font-family: 'Inter', sans-serif;
+      transition: transform 0.15s ease, opacity 0.15s ease;
+    }
+    .open-btn:hover { transform: translateY(-2px); opacity: 0.92; }
+    .signup-note {
+      margin-top: 36px;
+      font-size: 0.9rem;
+      color: #888;
+    }
+    .signup-error {
+      margin-top: 28px;
+      padding: 16px 20px;
+      border-radius: 14px;
+      background: #fdecec;
+      color: #b3261e;
+      font-size: 0.95rem;
+      display: none;
+    }
+    .spinner {
+      width: 26px;
+      height: 26px;
+      border: 3px solid rgba(0,0,0,0.12);
+      border-top-color: #111;
+      border-radius: 50%;
+      margin: 24px auto 0;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+
+  <!-- Navbar -->
+  <nav class="navbar scrolled" id="navbar">
+    <div class="container nav-inner">
+      <a href="index.html" class="nav-brand">
+        <img src="logo.png" alt="" />
+        Jnights
+      </a>
+      <div class="nav-links">
+        <a href="index.html#features">Fonctionnalités</a>
+        <a href="mailto:admin@jnights.com" class="nav-cta">Nous contacter</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="container">
+    <div class="signup-card">
+      <img src="logo.png" alt="Jnights" class="logo-badge" />
+      <h1>Invitation organisateur</h1>
+
+      <div id="loading">
+        <p>Ouverture de votre invitation dans l'application&nbsp;Jnights…</p>
+        <div class="spinner"></div>
+      </div>
+
+      <div id="fallback" style="display:none">
+        <p>
+          Si l'application ne s'est pas ouverte automatiquement, appuyez sur le
+          bouton ci-dessous depuis votre téléphone.
+        </p>
+        <a href="#" id="openAppBtn" class="open-btn">Ouvrir dans l'application</a>
+        <p class="signup-note">
+          L'application Jnights doit être installée sur votre appareil pour
+          finaliser la création de votre compte organisateur.<br />
+          Un problème&nbsp;? Écrivez-nous à
+          <a href="mailto:admin@jnights.com">admin@jnights.com</a>.
+        </p>
+      </div>
+
+      <div id="error" class="signup-error">
+        Ce lien d'invitation est invalide ou incomplet. Vérifiez que vous avez
+        bien copié le lien complet reçu par email, ou contactez-nous à
+        <a href="mailto:admin@jnights.com">admin@jnights.com</a>.
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-inner">
+        <div class="footer-brand">
+          <img src="logo.png" alt="" />
+          Jnights
+        </div>
+        <div class="footer-links">
+          <a href="index.html">Accueil</a>
+          <a href="privacy.html">Politique de confidentialité</a>
+          <a href="mailto:admin@jnights.com">Contact</a>
+        </div>
+      </div>
+      <p class="footer-copy">© 2026 Jnights — Tous droits réservés.</p>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      var params = new URLSearchParams(window.location.search);
+      var token = params.get('token');
+
+      var loading = document.getElementById('loading');
+      var fallback = document.getElementById('fallback');
+      var errorBox = document.getElementById('error');
+      var openBtn = document.getElementById('openAppBtn');
+
+      // Lien invalide : pas de token
+      if (!token) {
+        loading.style.display = 'none';
+        errorBox.style.display = 'block';
+        return;
+      }
+
+      // Schéma deep link de l'app (doit correspondre à app.json -> "scheme": "jnights")
+      var deepLink = 'jnights://creator-signup?token=' + encodeURIComponent(token);
+      openBtn.setAttribute('href', deepLink);
+
+      // Tente d'ouvrir l'app automatiquement
+      window.location.href = deepLink;
+
+      // Après un court délai, si on est toujours là, c'est que l'app ne s'est
+      // pas ouverte (non installée, ou navigateur de bureau) -> on montre le fallback.
+      setTimeout(function () {
+        loading.style.display = 'none';
+        fallback.style.display = 'block';
+      }, 1500);
+    })();
+  </script>
+
+</body>
+</html>
