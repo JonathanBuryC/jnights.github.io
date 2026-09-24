@@ -1,6 +1,6 @@
 /**
  * Dégradé animé discret derrière la section Fonctionnalités (shadergradient).
- * Crème -> lilas -> violet, mouvement lent ; masqué en haut/bas par le CSS.
+ * Lilas -> violet, mouvement lent ; court raccord en haut/bas par le CSS.
  */
 import { createElement as h } from "react";
 import { createRoot } from "react-dom/client";
@@ -16,13 +16,13 @@ if (el) {
         type: "plane",
         animate: reduced ? "off" : "on",
         uSpeed: 0.15,
-        uStrength: 2.4,
+        uStrength: 2,
         uDensity: 1.2,
         uFrequency: 5.5,
         uAmplitude: 1,
-        color1: "#f6f1ff",
-        color2: "#d9c6ff",
-        color3: "#a47bff",
+        color1: "#ece2ff",
+        color2: "#c6a8ff",
+        color3: "#8b5cf6",
         grain: "off",
         lightType: "3d",
         brightness: 1.2,

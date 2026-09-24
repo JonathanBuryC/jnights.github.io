@@ -383,7 +383,7 @@ section {
 .feature-card:hover {
   box-shadow: 0 20px 50px -20px rgba(15,15,20,0.18);
 }
-/* Fond dégradé de la section (canvas shadergradient), fondu en haut et en bas */
+/* Fond dégradé de la section (canvas shadergradient), court raccord en haut et en bas */
 #features {
   position: relative;
   overflow: hidden;
@@ -397,8 +397,8 @@ section {
   inset: 0;
   opacity: 0;
   transition: opacity 1.2s ease;
-  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 25%, #000 75%, transparent);
-  mask-image: linear-gradient(to bottom, transparent, #000 25%, #000 75%, transparent);
+  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 60px, #000 calc(100% - 60px), transparent);
+  mask-image: linear-gradient(to bottom, transparent, #000 60px, #000 calc(100% - 60px), transparent);
   pointer-events: none;
 }
 .features-bg.is-ready {
