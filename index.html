@@ -18,14 +18,14 @@
   <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png" />
   <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
   <link rel="manifest" href="site.webmanifest" />
-  <meta name="theme-color" content="#faf8f5" />
+  <meta name="theme-color" content="#0a090d" />
 
   <link rel="stylesheet" href="style.css" />
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
 </head>
 <body>
 
@@ -58,45 +58,25 @@
 
   <!-- Hero -->
   <header class="hero">
-    <div class="hero-glow"></div>
-    <div class="hero-glow two"></div>
     <div class="container hero-layout">
       <div class="hero-content">
-        <div class="hero-badge">
-          <span class="dot"></span>
-          Bientôt disponible sur iOS &amp; Android
-        </div>
-        <h1>
-          Vivez les meilleures<br />
-          <span class="grad">soirées</span> près de chez vous.
-        </h1>
+        <p class="eyebrow">iOS &amp; Android — bientôt disponible</p>
+        <h1>Vivez les meilleures <em>soirées</em> près de chez vous.</h1>
         <p class="lead">
           Jnights réunit les soirées et événements de votre ville.
           Découvrez, filtrez par âge et par lieu, réservez votre place —
           le tout dans une seule application.
         </p>
         <div class="hero-actions">
-          <a href="mailto:admin@jnights.com" class="btn btn-primary">
-            Être prévenu du lancement →
-          </a>
-          <a href="#features" class="btn btn-ghost">Découvrir</a>
+          <a href="mailto:admin@jnights.com" class="btn btn-primary">Être prévenu du lancement</a>
+          <a href="#features" class="btn btn-link">Découvrir ↓</a>
         </div>
       </div>
 
-      <!-- Mockup téléphone (cadre CSS + carrousel de screenshots) -->
-      <div class="hero-phone">
-        <div class="phone">
-          <div class="phone-viewport">
-            <img src="app-screen-1.png" alt="Découvrir les soirées" class="phone-screen is-active" data-slide="0" />
-            <img src="app-screen-2.png" alt="Rechercher un événement" class="phone-screen" data-slide="1" />
-            <img src="app-screen-3.png" alt="Détail d'un événement" class="phone-screen" data-slide="2" />
-          </div>
-        </div>
-        <div class="phone-dots" id="phoneDots">
-          <span class="dot-indicator is-active" data-dot="0"></span>
-          <span class="dot-indicator" data-dot="1"></span>
-          <span class="dot-indicator" data-dot="2"></span>
-        </div>
+      <!-- Téléphone 3D (phone3d.js) ; l'image reste si WebGL n'est pas dispo -->
+      <div class="hero-phone" id="phone3d">
+        <img src="app-screen-1.png" alt="Aperçu de l'application Jnights" class="phone-fallback" />
+        <div class="phone-canvas"></div>
       </div>
     </div>
   </header>
@@ -104,36 +84,35 @@
   <!-- Features -->
   <section id="features">
     <div class="container">
-      <div class="section-head">
-        <div class="section-tag">Ce que vous pouvez faire</div>
+      <div class="section-head reveal">
+        <p class="eyebrow">Fonctionnalités</p>
         <h2>Tout ce qu'il faut pour sortir, au bon endroit.</h2>
-        <p>Une expérience pensée pour découvrir et organiser des événements simplement.</p>
       </div>
-      <div class="features-grid">
-        <div class="feature-card">
-          <div class="feature-ico">🔎</div>
-          <h3>Découvrez près de chez vous </h3>
+      <ol class="features">
+        <li class="feature reveal">
+          <span class="feature-num">01</span>
+          <h3>Découvrez près de chez vous</h3>
           <p>Parcourez les soirées à venir et filtrez par ville et par tranche d'âge pour trouver ce qui vous correspond.</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-ico">🎟️</div>
+        </li>
+        <li class="feature reveal">
+          <span class="feature-num">02</span>
           <h3>Réservez votre place</h3>
           <p>Rejoignez un événement en un geste et gardez vos billets toujours accessibles dans l'application.</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-ico">✨</div>
+        </li>
+        <li class="feature reveal">
+          <span class="feature-num">03</span>
           <h3>Créez vos événements</h3>
           <p>Organisateurs : publiez vos soirées, gérez vos participants et développez votre communauté.</p>
-        </div>
-      </div>
+        </li>
+      </ol>
     </div>
   </section>
 
   <!-- About / CTA -->
-  <section id="about">
+  <section id="about" class="closing">
     <div class="container">
-      <div class="cta-banner">
-        <h2>La nuit commence ici.</h2>
+      <h2 class="closing-title reveal">La nuit<br />commence ici.</h2>
+      <div class="closing-row reveal">
         <p>Soyez parmi les premiers à rejoindre Jnights dès sa sortie.</p>
         <a href="mailto:admin@jnights.com" class="btn btn-primary">Nous contacter</a>
       </div>
@@ -159,5 +138,17 @@
   </footer>
 
   <script src="script.js"></script>
+  <script type="importmap">
+    {
+      "imports": {
+        "react": "https://esm.sh/react@18.3.1",
+        "react-dom/client": "https://esm.sh/react-dom@18.3.1/client?deps=react@18.3.1",
+        "three": "https://esm.sh/three@0.169.0",
+        "three/addons/": "https://esm.sh/three@0.169.0/examples/jsm/",
+        "@react-three/fiber": "https://esm.sh/@react-three/fiber@8.17.10?deps=react@18.3.1,react-dom@18.3.1,three@0.169.0"
+      }
+    }
+  </script>
+  <script type="module" src="phone3d.js"></script>
 </body>
 </html>

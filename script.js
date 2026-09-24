@@ -38,10 +38,10 @@ function initNavbar() {
 }
 
 // ===========================
-// APPARITION DES CARTES AU SCROLL
+// APPARITION DES BLOCS AU SCROLL
 // ===========================
 function initScrollReveal() {
-  const items = document.querySelectorAll(".feature-card");
+  const items = document.querySelectorAll(".reveal");
   if (!items.length) return;
 
   const observer = new IntersectionObserver(
@@ -129,42 +129,6 @@ function initEasterEgg() {
 }
 
 // ===========================
-// CARROUSEL DU MOCKUP TÉLÉPHONE
-// ===========================
-function initPhoneCarousel() {
-  const slides = document.querySelectorAll(".phone-screen");
-  const dots = document.querySelectorAll(".dot-indicator");
-  if (slides.length < 2) return;
-
-  let current = 0;
-  let timer = null;
-
-  const show = (index) => {
-    current = (index + slides.length) % slides.length;
-    slides.forEach((s, i) => s.classList.toggle("is-active", i === current));
-    dots.forEach((d, i) => d.classList.toggle("is-active", i === current));
-  };
-
-  const start = () => {
-    timer = setInterval(() => show(current + 1), 3000);
-  };
-  const restart = () => {
-    if (timer) clearInterval(timer);
-    start();
-  };
-
-  // Clic sur un point → va à la slide + relance le timer
-  dots.forEach((dot, i) => {
-    dot.addEventListener("click", () => {
-      show(i);
-      restart();
-    });
-  });
-
-  start();
-}
-
-// ===========================
 // INIT
 // ===========================
 document.addEventListener("DOMContentLoaded", () => {
@@ -172,14 +136,13 @@ document.addEventListener("DOMContentLoaded", () => {
   initNavbar();
   initSmoothScroll();
   initEasterEgg();
-  initPhoneCarousel();
 
   if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
     initScrollReveal();
   } else {
-    // Sans animation : afficher les cartes directement
+    // Sans animation : afficher les blocs directement
     document
-      .querySelectorAll(".feature-card")
+      .querySelectorAll(".reveal")
       .forEach((el) => el.classList.add("visible"));
   }
 });
