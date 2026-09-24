@@ -57,6 +57,7 @@ const DUR = { heroToBack: 1, toEdge: 0.8, toFace: 0.8, hold: 4, faceToEdge: 0.7,
 const SHEET = true; // fenêtre de filtres qui monte dans l'écran pendant le palier 1
 const SCRUB = 0.6; // lissage du scrub (s)
 const MOBILE_MAX = 767; // en dessous : téléphone centré, plus petit, texte en dessous
+const REVEAL_EXTRA = 0.2; // scroll libre avant que le téléphone bouge (fraction de la hauteur d'écran)
 
 const SW = 0.92, SH = SW * (2532 / 1170); // écran au ratio exact des captures
 const W = SW + 0.08, H = SH + 0.08, D = 0.1; // châssis
@@ -122,7 +123,7 @@ function initScroll(storyEl, steps, placeholder) {
   let anchors = [];
   const measure = () => {
     const top = (el) => el.getBoundingClientRect().top + scrollY;
-    reveal.d0 = Math.max(0, top(placeholder) + placeholder.offsetHeight + 24 - innerHeight);
+    reveal.d0 = Math.max(0, top(placeholder) + placeholder.offsetHeight + 24 - innerHeight) + innerHeight * REVEAL_EXTRA;
     anchors = [[0, 0], [reveal.d0, 0]];
     steps.forEach((el, i) => anchors.push([top(el) + el.offsetHeight / 2 - innerHeight / 2, tl.labels["p" + (i + 1) + "mid"]]));
     anchors.push([top(storyEl) + storyEl.offsetHeight - innerHeight, tl.duration()]);

@@ -9,6 +9,7 @@
   --bg: #faf8f5;            /* crème très clair */
   --bg-alt: #ffffff;
   --ink: #0f0f14;           /* texte quasi-noir */
+  --ink-strong: #1d1a26;    /* paragraphes posés sur le dégradé */
   --ink-soft: #3d3d48;      /* texte secondaire (assez contrasté sur le dégradé) */
   --ink-faint: #9a9aa5;
   --line: #ececec;
@@ -155,7 +156,7 @@ a {
   display: flex;
   align-items: center;
   position: relative;
-  padding: 120px 0 80px;
+  padding: 110px 0 50px;
   overflow: hidden;
 }
 .hero-glow {
@@ -190,17 +191,16 @@ a {
 .hero-content {
   flex: 1;
   max-width: 600px;
-  /* le téléphone est plus haut que l'écran : le texte reste en haut, visible */
-  align-self: flex-start;
-  padding-top: 14vh;
 }
 
 /* Téléphone 3D (phone3d.js) */
 .hero-phone {
   position: relative;
-  flex: 0 0 min(48%, 560px);
-  height: min(112vh, 1120px);
-  min-height: 800px;
+  flex: 0 0 min(46%, 520px);
+  /* téléphone + points visibles entièrement dès le premier écran */
+  height: calc(100vh - 170px);
+  min-height: 520px;
+  max-height: 860px;
 }
 .phone-fallback {
   position: absolute;
@@ -303,7 +303,8 @@ a {
 }
 .hero p.lead {
   font-size: clamp(1.05rem, 2vw, 1.3rem);
-  color: var(--ink-soft);
+  color: var(--ink-strong);
+  font-weight: 500;
   max-width: 560px;
   margin-bottom: 40px;
 }
@@ -349,7 +350,7 @@ section {
   padding: 100px 0;
 }
 .section-head {
-  max-width: 640px;
+  max-width: 900px;
   margin-bottom: 64px;
 }
 .section-tag {
@@ -362,9 +363,9 @@ section {
 }
 .section-head h2 {
   font-family: var(--font-display);
-  font-size: clamp(2rem, 4vw, 3rem);
-  line-height: 1.1;
-  letter-spacing: -0.02em;
+  font-size: clamp(2.4rem, 5.2vw, 4.4rem);
+  line-height: 1.02;
+  letter-spacing: -0.035em;
   font-weight: 700;
 }
 .section-head p {
@@ -408,29 +409,42 @@ section {
   max-width: 400px;
 }
 .feature-detail p {
-  font-size: 1.05rem;
-  color: var(--ink-soft);
+  font-size: 1.1rem;
+  color: var(--ink-strong);
+  font-weight: 500;
 }
 .feature-points {
   list-style: none;
   margin-top: 24px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  /* les 3 pastilles côte à côte, même si le paragraphe est plus étroit */
+  width: max-content;
+  max-width: min(560px, calc(100vw - 40px));
 }
 .feature-points li {
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 12px;
-  padding: 11px 0;
-  border-top: 1px solid rgba(15, 15, 20, 0.1);
-  font-size: 0.95rem;
-  font-weight: 500;
+  gap: 8px;
+  padding: 8px 14px 8px 10px;
+  border-radius: 100px;
+  background: rgba(255, 255, 255, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 6px 18px -10px rgba(76, 29, 149, 0.45);
+  font-size: 0.88rem;
+  font-weight: 600;
+  white-space: nowrap;
 }
 .feature-points li::before {
   content: "";
   flex: none;
-  width: 6px;
-  height: 6px;
+  width: 18px;
+  height: 18px;
   border-radius: 50%;
-  background: var(--accent-2);
+  background: var(--accent-2) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12.5l4.5 4.5L19 7.5'/%3E%3C/svg%3E") center / 11px no-repeat;
 }
 /* Palier 3 : titre en haut, détail en bas à gauche, téléphone au centre */
 .step-center .feature-text {
@@ -442,8 +456,9 @@ section {
   flex-direction: column;
   justify-content: space-between;
 }
-.step-center .feature-detail {
-  max-width: 340px;
+.step-center .feature-detail,
+.step-center .feature-points {
+  max-width: 380px;
 }
 
 /* Fond dégradé de toute la page (canvas shadergradient fixe, derrière le contenu) */
@@ -702,7 +717,8 @@ section {
     padding: 0;
     display: block;
   }
-  .feature-text h3 {
+  .feature-text h3,
+  .section-head h2 {
     font-size: clamp(2rem, 9vw, 2.6rem);
     margin-bottom: 14px;
   }
