@@ -41,7 +41,7 @@ function initNavbar() {
 // APPARITION DES BLOCS AU SCROLL
 // ===========================
 function initScrollReveal() {
-  const items = document.querySelectorAll(".feature-card");
+  const items = document.querySelectorAll(".feature-text");
   if (!items.length) return;
 
   const observer = new IntersectionObserver(
@@ -142,7 +142,7 @@ document.addEventListener("DOMContentLoaded", () => {
   } else {
     // Sans animation : afficher les blocs directement
     document
-      .querySelectorAll(".feature-card")
+      .querySelectorAll(".feature-text")
       .forEach((el) => el.classList.add("visible"));
   }
 });

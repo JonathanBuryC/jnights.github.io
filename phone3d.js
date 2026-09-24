@@ -2,7 +2,8 @@
  * Téléphone 3D (React Three Fiber + GSAP ScrollTrigger, sans build : modules via importmap).
  * Hero : calé sur #phone3d, écrans en défilement auto. Au scroll, une timeline GSAP
  * (réglages : POSES / DUR ci-dessous) l'anime de dos → tranche → face écran pour chaque
- * section .feature-step ; l'écran ne change que quand il est de dos (invisible).
+ * section .feature-step (paliers à droite, à gauche puis au milieu) ; l'écran ne change
+ * que quand il est de dos (invisible).
  * Si WebGL ou le CDN échoue, l'image .phone-fallback reste affichée.
  */
 import { createElement as h, Fragment, Suspense, useEffect, useMemo, useRef, useState } from "react";
@@ -36,19 +37,19 @@ const DISCOVER = 0, BOOK = 2, CREATE = 3;
 const POSES = {
   back1: { x: 0.18, y: -0.16, s: 0.95, ry: 160, rz: -15 },  // etape-01 : de dos, bas coupé
   edge1: { x: 0.2, y: -0.07, s: 0.88, ry: 270, rz: -6 },    // etape-02 : tranche
-  face1: { x: 0.2, y: -0.01, s: 0.8, ry: 340, rz: 0 },      // etape-03 : palier 1, 3/4 (-20°)
+  face1: { x: 0.2, y: -0.01, s: 0.8, ry: 340, rz: 0 },      // etape-03 : palier 1 À DROITE, 3/4 (-20°)
   face1Up: { y: 0.04 },                                      // etape-04 : remonte doucement
-  edge2: { x: 0.17, y: 0.02, s: 0.8, ry: 450, rz: -12 },    // etape-05 : tranche
-  back2: { x: 0.1, y: -0.06, s: 0.84, ry: 540, rz: -30 },   // etape-06 : de dos, vers le centre…
-  back2Low: { x: 0.06, y: -0.14, rz: -60 },                  // …descend et bascule
-  turn2: { x: 0.14, y: -0.06, s: 0.82, ry: 650, rz: -15 },  // etape-07 : se retourne, encore incliné
-  face2: { x: 0.2, y: -0.01, s: 0.8, ry: 700, rz: 0 },      // palier 2, bien droit (portrait)
+  edge2: { x: 0.12, y: 0.02, s: 0.8, ry: 450, rz: -12 },    // etape-05 : tranche
+  back2: { x: 0.02, y: -0.06, s: 0.84, ry: 540, rz: -30 },  // etape-06 : de dos, traverse vers la gauche…
+  back2Low: { x: -0.08, y: -0.14, rz: -60 },                 // …descend et bascule
+  turn2: { x: -0.16, y: -0.06, s: 0.82, ry: 690, rz: -15 }, // etape-07 : se retourne, encore incliné
+  face2: { x: -0.2, y: -0.01, s: 0.8, ry: 740, rz: 0 },     // palier 2 À GAUCHE, 3/4 inversé (+20°)
   face2Up: { y: 0.04 },
-  edge3: { x: 0.17, y: 0.02, s: 0.8, ry: 810, rz: -12 },    // tranche
-  back3: { x: 0.12, y: -0.12, s: 0.9, ry: 900, rz: -15 },   // de dos
-  edge3b: { x: 0.18, y: -0.06, s: 0.86, ry: 990, rz: -6 },  // tranche
-  face3: { x: 0.2, y: -0.01, s: 0.8, ry: 1060, rz: 0 },     // palier 3
-  face3Up: { y: 0.04 },
+  edge3: { x: -0.14, y: 0.02, s: 0.8, ry: 810, rz: 12 },    // tranche
+  back3: { x: -0.06, y: -0.14, s: 0.86, ry: 900, rz: 15 },  // de dos, revient vers le milieu
+  edge3b: { x: 0, y: -0.14, s: 0.78, ry: 990, rz: 6 },      // tranche
+  face3: { x: 0, y: -0.13, s: 0.72, ry: 1080, rz: 0 },      // palier 3 AU MILIEU, sous le titre
+  face3Up: { y: -0.1 },
 };
 // Durées relatives de chaque phase (seul le rapport entre elles compte).
 // hold = palier face écran : c'est lui qui laisse le temps de lire.
@@ -71,6 +72,9 @@ addEventListener("pointermove", (e) => {
 // État animé par GSAP et lu à chaque image par le rendu 3D (aucun re-render React au scroll).
 // hero = 1 : calé sur l'emplacement du hero ; screen = -1 : défilement auto du hero.
 const S = { p: 0, hero: 1, x: 0.2, y: 0, s: 0.8, ry: -12, rz: 0, screen: -1, sheet: 0 };
+// Scroll de « révélation » : on descend d'abord normalement jusqu'à voir tout le
+// téléphone (et ses points) ; la séquence ne démarre qu'ensuite.
+const reveal = { d0: 0 };
 
 function buildTimeline() {
   const tl = gsap.timeline({ paused: true, defaults: { ease: "power2.inOut" } });
@@ -113,19 +117,20 @@ function buildTimeline() {
 
 // Scroll → temps de la timeline, en calant le milieu de chaque palier sur le moment où
 // la section correspondante est centrée à l'écran (synchronisation écran / texte).
-function initScroll(storyEl, steps) {
+function initScroll(storyEl, steps, placeholder) {
   const tl = buildTimeline();
   let anchors = [];
   const measure = () => {
     const top = (el) => el.getBoundingClientRect().top + scrollY;
-    anchors = [[0, 0]];
+    reveal.d0 = Math.max(0, top(placeholder) + placeholder.offsetHeight + 24 - innerHeight);
+    anchors = [[0, 0], [reveal.d0, 0]];
     steps.forEach((el, i) => anchors.push([top(el) + el.offsetHeight / 2 - innerHeight / 2, tl.labels["p" + (i + 1) + "mid"]]));
     anchors.push([top(storyEl) + storyEl.offsetHeight - innerHeight, tl.duration()]);
   };
   const timeAt = (y) => {
     for (let i = 0; i < anchors.length - 1; i++) {
       const [y0, t0] = anchors[i], [y1, t1] = anchors[i + 1];
-      if (y <= y1) return t0 + (t1 - t0) * Math.min(1, Math.max(0, (y - y0) / (y1 - y0)));
+      if (y <= y1) return y1 > y0 ? t0 + (t1 - t0) * Math.min(1, Math.max(0, (y - y0) / (y1 - y0))) : t1;
     }
     return tl.duration();
   };
@@ -215,12 +220,13 @@ function Phone({ index, onReady }) {
   const logo = useLoader(THREE.TextureLoader, "logo.png");
   const placeholder = useMemo(() => document.getElementById("phone3d"), []);
 
-  // Hero : calé sur l'emplacement #phone3d tel qu'il est en haut de page.
+  // Hero : suit l'emplacement #phone3d pendant la révélation, puis reste fixe à l'écran.
   const heroPose = () => {
     const r = placeholder.getBoundingClientRect(), k = viewport.width / size.width;
+    const top = r.top + scrollY - Math.min(scrollY, reveal.d0);
     return {
       x: (r.left + r.width / 2 - size.width / 2) * k,
-      y: -(r.top + scrollY + r.height / 2 - size.height / 2) * k,
+      y: -(top + r.height / 2 - size.height / 2) * k,
       s: (0.86 * r.height * k) / H,
     };
   };
@@ -401,6 +407,6 @@ const stage = document.getElementById("phoneStage");
 const placeholder = document.getElementById("phone3d");
 const storyEl = document.getElementById("story");
 if (stage && placeholder && storyEl) {
-  initScroll(storyEl, [...document.querySelectorAll(".feature-step")]);
+  initScroll(storyEl, [...document.querySelectorAll(".feature-step")], placeholder);
   createRoot(stage).render(h(App, { placeholder, storyEl }));
 }

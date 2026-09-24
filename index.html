@@ -29,6 +29,9 @@
 </head>
 <body>
 
+  <!-- Dégradé animé en fond de toute la page (features-bg.js, shadergradient) -->
+  <div class="page-bg" id="pageBg"></div>
+
   <!-- Preloader -->
   <div id="preloader" class="preloader">
     <img src="logo.png" alt="Jnights" class="preloader-logo" />
@@ -98,30 +101,49 @@
 
   <!-- Features -->
   <section id="features">
-    <!-- Dégradé animé discret (features-bg.js, shadergradient) -->
-    <div class="features-bg" id="featuresBg"></div>
     <div class="container">
       <div class="section-head">
         <div class="section-tag">Ce que vous pouvez faire</div>
         <h2>Tout ce qu'il faut pour sortir, au bon endroit.</h2>
         <p>Une expérience pensée pour découvrir et organiser des événements simplement.</p>
       </div>
-      <div class="feature-step">
-        <div class="feature-card">
-          <h3>Découvrez près de chez vous</h3>
-          <p>Parcourez les soirées à venir et filtrez par ville et par tranche d'âge pour trouver ce qui vous correspond.</p>
+      <div class="feature-step step-left">
+        <div class="feature-text">
+          <h3>Découvrez près<br />de chez vous</h3>
+          <div class="feature-detail">
+            <p>Parcourez les soirées à venir et filtrez par ville et par tranche d'âge pour trouver ce qui vous correspond.</p>
+            <ul class="feature-points">
+              <li>Filtres par ville et par tranche d'âge</li>
+              <li>Le prix affiché sur chaque soirée</li>
+              <li>L'organisateur visible en un coup d'œil</li>
+            </ul>
+          </div>
         </div>
       </div>
-      <div class="feature-step">
-        <div class="feature-card">
-          <h3>Réservez votre place</h3>
-          <p>Rejoignez un événement en un geste et gardez vos billets toujours accessibles dans l'application.</p>
+      <div class="feature-step step-right">
+        <div class="feature-text">
+          <h3>Réservez<br />votre place</h3>
+          <div class="feature-detail">
+            <p>Rejoignez un événement en un geste et gardez vos billets toujours accessibles dans l'application.</p>
+            <ul class="feature-points">
+              <li>Les places restantes affichées en direct</li>
+              <li>Date, lieu et tranche d'âge réunis sur une page</li>
+              <li>Vos billets rangés dans l'onglet Tickets</li>
+            </ul>
+          </div>
         </div>
       </div>
-      <div class="feature-step">
-        <div class="feature-card">
-          <h3>Créez vos événements</h3>
-          <p>Organisateurs : publiez vos soirées, gérez vos participants et développez votre communauté.</p>
+      <div class="feature-step step-center">
+        <div class="feature-text">
+          <h3>Créez vos<br />événements</h3>
+          <div class="feature-detail">
+            <p>Organisateurs : publiez vos soirées, gérez vos participants et développez votre communauté.</p>
+            <ul class="feature-points">
+              <li>Titre, description, lieu, date et affiche</li>
+              <li>Publication en un seul bouton</li>
+              <li>Le suivi de vos inscrits</li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>
