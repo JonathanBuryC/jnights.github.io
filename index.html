@@ -59,7 +59,7 @@
   <!-- Hero + fonctionnalités : le téléphone 3D (phone3d.js) reste fixé à l'écran
        dans .story-stage et suit le scroll d'une étape à l'autre -->
   <div class="story" id="story">
-  <div class="story-stage" id="phoneStage"></div>
+  <div class="story-stage-wrap"><div class="story-stage" id="phoneStage"></div></div>
 
   <!-- Hero -->
   <header class="hero">
@@ -167,6 +167,8 @@
         "three": "https://esm.sh/three@0.169.0",
         "three/addons/": "https://esm.sh/three@0.169.0/examples/jsm/",
         "@react-three/fiber": "https://esm.sh/@react-three/fiber@8.17.10?deps=react@18.3.1,react-dom@18.3.1,three@0.169.0",
+        "gsap": "https://esm.sh/gsap@3.12.5",
+        "gsap/ScrollTrigger": "https://esm.sh/gsap@3.12.5/ScrollTrigger",
         "@shadergradient/react": "https://esm.sh/@shadergradient/react@2.4.20?deps=react@18.3.1,react-dom@18.3.1,three@0.169.0,@react-three/fiber@8.17.10"
       }
     }

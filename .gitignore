@@ -1,0 +1,23 @@
+# Captures de l'animation de référence (usage interne, ne pas publier sur le site)
+docs/reference/
+
+# Systèmes
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Éditeurs
+.vscode/
+.idea/
+*.swp
+
+# Dépendances / builds éventuels
+node_modules/
+
+# Logs et fichiers temporaires
+*.log
+*.tmp
+
+# Secrets
+.env
+.env.*

@@ -217,13 +217,18 @@ a {
 .story {
   position: relative;
 }
+/* Le calque couvre toute la séquence ; la scène colle à l'écran jusqu'à la fin
+   de .story puis repart avec la page (le téléphone « se libère »). */
+.story-stage-wrap {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+}
 .story-stage {
   position: sticky;
   top: 0;
   height: 100vh;
-  margin-bottom: -100vh;
-  z-index: 2;
-  pointer-events: none;
   opacity: 0;
   transition: opacity 0.9s ease;
 }
@@ -372,7 +377,7 @@ section {
    ============================================================ */
 /* Une étape par écran : le texte à gauche, le téléphone (fixe) à droite */
 .feature-step {
-  min-height: 100vh;
+  min-height: 130vh;
   display: flex;
   align-items: center;
 }
@@ -630,13 +635,6 @@ section {
    RESPONSIVE
    ============================================================ */
 @media (max-width: 860px) {
-  .feature-step {
-    align-items: flex-end;
-    padding-bottom: 6vh;
-  }
-  .feature-step .feature-card {
-    max-width: 100%;
-  }
   .phone-dots {
     top: 38%;
   }
@@ -667,6 +665,17 @@ section {
     width: 100%;
     height: min(168vw, 900px);
     min-height: 0;
+  }
+}
+
+/* Mobile : téléphone centré en haut, texte en dessous pour ne pas être masqué */
+@media (max-width: 767px) {
+  .feature-step {
+    align-items: flex-end;
+    padding-bottom: 6vh;
+  }
+  .feature-step .feature-card {
+    max-width: 100%;
   }
 }
 
