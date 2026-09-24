@@ -98,9 +98,18 @@ function Phone({ index, onNext, onReady }) {
     g.rotation.x = THREE.MathUtils.damp(g.rotation.x, rx, 3, dt);
     g.rotation.z = Math.sin(t * 0.6) * 0.015 * float;
     g.position.y = THREE.MathUtils.damp(g.position.y, Math.sin(t * 0.9) * 0.04 * float, 4, dt);
-    layers.current.forEach((m, i) => {
-      if (m) m.material.opacity = THREE.MathUtils.damp(m.material.opacity, i === index ? 1 : 0, 14, dt);
-    });
+    // Transition : le nouvel écran apparaît en fondu par-dessus l'ancien,
+    // qui reste affiché dessous jusqu'à être entièrement recouvert.
+    const active = layers.current[index];
+    if (active) {
+      active.renderOrder = 10;
+      active.material.opacity = THREE.MathUtils.damp(active.material.opacity, 1, 3, dt);
+      layers.current.forEach((m, i) => {
+        if (!m || i === index) return;
+        m.renderOrder = i;
+        if (active.material.opacity > 0.995) m.material.opacity = 0;
+      });
+    }
   });
 
   const z = D / 2;
