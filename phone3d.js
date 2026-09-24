@@ -54,8 +54,28 @@ function Environment() {
 function Phone({ index, onNext, onReady }) {
   const group = useRef();
   const layers = useRef([]);
-  const { gl } = useThree();
-  const textures = useLoader(THREE.TextureLoader, SCREENS.map((s) => s.src));
+  const { gl, size, viewport } = useThree();
+  const images = useLoader(THREE.ImageLoader, SCREENS.map((s) => s.src));
+
+  // Netteté : on réduit les captures à la taille réelle d'affichage (redimensionnement
+  // haute qualité du navigateur) et on coupe les mipmaps, source du flou sur le texte.
+  // ponytail: taille calculée au montage, pas recalculée au redimensionnement de la fenêtre
+  const textures = useMemo(() => {
+    const hPx = Math.min(2532, Math.round(SH * (size.height / viewport.height) * gl.getPixelRatio() * 1.15));
+    return images.map((img) => {
+      const c = document.createElement("canvas");
+      c.height = hPx;
+      c.width = Math.round((hPx * 1170) / 2532);
+      const ctx = c.getContext("2d");
+      ctx.imageSmoothingQuality = "high";
+      ctx.drawImage(img, 0, 0, c.width, c.height);
+      const t = new THREE.CanvasTexture(c);
+      t.colorSpace = THREE.SRGBColorSpace;
+      t.generateMipmaps = false;
+      t.minFilter = THREE.LinearFilter;
+      return t;
+    });
+  }, [images]);
 
   const geo = useMemo(() => {
     const bevel = 0.02;
@@ -64,20 +84,16 @@ function Phone({ index, onNext, onReady }) {
       bevelSegments: 8, curveSegments: 32,
     });
     body.center();
-    return { body, screen: flatRounded(SW, SH, 0.1), island: flatRounded(0.27, 0.078, 0.039), glass: flatRounded(SW, SH, 0.1) };
+    return { body, screen: flatRounded(SW, SH, 0.1), island: flatRounded(0.27, 0.078, 0.039) };
   }, []);
 
-  useEffect(() => {
-    const aniso = gl.capabilities.getMaxAnisotropy();
-    textures.forEach((t) => { t.colorSpace = THREE.SRGBColorSpace; t.anisotropy = aniso; t.needsUpdate = true; });
-    onReady();
-  }, [textures]);
+  useEffect(onReady, [textures]);
 
   useFrame((state, dt) => {
     const g = group.current, t = state.clock.elapsedTime;
     const float = REDUCED ? 0 : 1;
-    const ry = -0.38 + pointer.x * 0.28 + Math.sin(t * 0.45) * 0.05 * float;
-    const rx = 0.1 + pointer.y * 0.12;
+    const ry = -0.22 + pointer.x * 0.18 + Math.sin(t * 0.45) * 0.04 * float;
+    const rx = 0.05 + pointer.y * 0.08;
     g.rotation.y = THREE.MathUtils.damp(g.rotation.y, ry, 3, dt);
     g.rotation.x = THREE.MathUtils.damp(g.rotation.x, rx, 3, dt);
     g.rotation.z = Math.sin(t * 0.6) * 0.015 * float;
@@ -96,7 +112,7 @@ function Phone({ index, onNext, onReady }) {
   return h("group", {
       ref: group,
       // entrée : le téléphone pivote depuis le profil
-      rotation: [0.1, REDUCED ? -0.38 : -1.9, 0],
+      rotation: [0.05, REDUCED ? -0.22 : -1.9, 0],
       position: [0, REDUCED ? 0 : -0.25, 0],
       onClick: (e) => { e.stopPropagation(); onNext(); },
       onPointerOver: () => (document.body.style.cursor = "pointer"),
@@ -115,9 +131,6 @@ function Phone({ index, onNext, onReady }) {
     }, h("meshBasicMaterial", { map, transparent: true, opacity: i === index ? 1 : 0, depthWrite: false, toneMapped: false }))),
     h("mesh", { geometry: geo.island, position: [0, SH / 2 - 0.058, z + 0.002], renderOrder: 5 },
       h("meshBasicMaterial", { color: "#000" })),
-    // reflet de la vitre : suit l'environnement quand le téléphone tourne
-    h("mesh", { geometry: geo.glass, position: [0, 0, z + 0.003], renderOrder: 6 },
-      h("meshStandardMaterial", { color: "#fff", metalness: 1, roughness: 0.06, transparent: true, opacity: 0.07, depthWrite: false })),
   );
 }
 
@@ -142,7 +155,7 @@ function App({ container }) {
   return h("div", { className: "phone-stage" },
     h(Canvas, {
         dpr: [1, 2], frameloop: visible ? "always" : "never",
-        camera: { position: [0, 0, 5.1], fov: 30 },
+        camera: { position: [0, 0, 4.5], fov: 30 },
         gl: { antialias: true, alpha: true },
       },
       h(Environment),
@@ -151,11 +164,11 @@ function App({ container }) {
       h("pointLight", { position: [3, -1, 2.5], intensity: 14, color: "#8b5cf6" }),
       h(Suspense, { fallback: null },
         h(Phone, { index, onNext: () => go((index + 1) % SCREENS.length), onReady: () => container.classList.add("is-ready") }))),
-    h("div", { className: "phone-tabs", role: "tablist" },
+    h("div", { className: "phone-dots" },
       SCREENS.map((s, i) => h("button", {
-        key: s.src, role: "tab", "aria-selected": i === index,
-        className: i === index ? "is-active" : "", onClick: () => go(i),
-      }, h("span", null, String(i + 1).padStart(2, "0")), s.label))),
+        key: s.src, "aria-label": s.label,
+        className: "dot-indicator" + (i === index ? " is-active" : ""), onClick: () => go(i),
+      }))),
   );
 }
 

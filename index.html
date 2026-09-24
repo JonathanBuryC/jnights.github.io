@@ -18,14 +18,14 @@
   <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png" />
   <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
   <link rel="manifest" href="site.webmanifest" />
-  <meta name="theme-color" content="#0a090d" />
+  <meta name="theme-color" content="#faf8f5" />
 
   <link rel="stylesheet" href="style.css" />
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@500;600;700;800&display=swap" rel="stylesheet" />
 </head>
 <body>
 
@@ -58,18 +58,28 @@
 
   <!-- Hero -->
   <header class="hero">
+    <div class="hero-glow"></div>
+    <div class="hero-glow two"></div>
     <div class="container hero-layout">
       <div class="hero-content">
-        <p class="eyebrow">iOS &amp; Android — bientôt disponible</p>
-        <h1>Vivez les meilleures <em>soirées</em> près de chez vous.</h1>
+        <div class="hero-badge">
+          <span class="dot"></span>
+          Bientôt disponible sur iOS &amp; Android
+        </div>
+        <h1>
+          Vivez les meilleures<br />
+          <span class="grad">soirées</span> près de chez vous.
+        </h1>
         <p class="lead">
           Jnights réunit les soirées et événements de votre ville.
           Découvrez, filtrez par âge et par lieu, réservez votre place —
           le tout dans une seule application.
         </p>
         <div class="hero-actions">
-          <a href="mailto:admin@jnights.com" class="btn btn-primary">Être prévenu du lancement</a>
-          <a href="#features" class="btn btn-link">Découvrir ↓</a>
+          <a href="mailto:admin@jnights.com" class="btn btn-primary">
+            Être prévenu du lancement →
+          </a>
+          <a href="#features" class="btn btn-ghost">Découvrir</a>
         </div>
       </div>
 
@@ -84,35 +94,36 @@
   <!-- Features -->
   <section id="features">
     <div class="container">
-      <div class="section-head reveal">
-        <p class="eyebrow">Fonctionnalités</p>
+      <div class="section-head">
+        <div class="section-tag">Ce que vous pouvez faire</div>
         <h2>Tout ce qu'il faut pour sortir, au bon endroit.</h2>
+        <p>Une expérience pensée pour découvrir et organiser des événements simplement.</p>
       </div>
-      <ol class="features">
-        <li class="feature reveal">
-          <span class="feature-num">01</span>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-shot"><img src="feature-discover.jpg" alt="Liste des soirées dans l'application" loading="lazy" /></div>
           <h3>Découvrez près de chez vous</h3>
           <p>Parcourez les soirées à venir et filtrez par ville et par tranche d'âge pour trouver ce qui vous correspond.</p>
-        </li>
-        <li class="feature reveal">
-          <span class="feature-num">02</span>
+        </div>
+        <div class="feature-card">
+          <div class="feature-shot"><img src="feature-book.jpg" alt="Bouton Prendre sa place" loading="lazy" /></div>
           <h3>Réservez votre place</h3>
           <p>Rejoignez un événement en un geste et gardez vos billets toujours accessibles dans l'application.</p>
-        </li>
-        <li class="feature reveal">
-          <span class="feature-num">03</span>
+        </div>
+        <div class="feature-card">
+          <div class="feature-shot"><img src="feature-create.jpg" alt="Page d'un événement avec ses inscrits" loading="lazy" /></div>
           <h3>Créez vos événements</h3>
           <p>Organisateurs : publiez vos soirées, gérez vos participants et développez votre communauté.</p>
-        </li>
-      </ol>
+        </div>
+      </div>
     </div>
   </section>
 
   <!-- About / CTA -->
-  <section id="about" class="closing">
+  <section id="about">
     <div class="container">
-      <h2 class="closing-title reveal">La nuit<br />commence ici.</h2>
-      <div class="closing-row reveal">
+      <div class="cta-banner">
+        <h2>La nuit commence ici.</h2>
         <p>Soyez parmi les premiers à rejoindre Jnights dès sa sortie.</p>
         <a href="mailto:admin@jnights.com" class="btn btn-primary">Nous contacter</a>
       </div>

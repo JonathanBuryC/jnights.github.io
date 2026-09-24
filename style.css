@@ -192,76 +192,52 @@ a {
   max-width: 600px;
 }
 
-/* Mockup téléphone CSS */
+/* Téléphone 3D (phone3d.js) */
 .hero-phone {
-  flex-shrink: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-.phone {
   position: relative;
-  width: 360px;
-  /* hauteur = largeur intérieure × ratio image (2532/1170 ≈ 2.164)
-     pour que l'écran épouse exactement le screenshot, sans bande noire.
-     intérieur = 360 - 2*12 = 336 ; 336 * 2.164 ≈ 727 ; + 2*12 = 751 */
-  height: 751px;
-  background: #0a0a0f;
-  border-radius: 52px;
-  border: 12px solid #15151c;
-  box-shadow:
-    0 0 0 2px #2a2a33,
-    0 40px 80px -20px rgba(139, 92, 246, 0.4),
-    0 20px 50px -20px rgba(0, 0, 0, 0.6);
-  overflow: hidden;
+  flex: 0 0 min(46%, 560px);
+  height: min(80vh, 800px);
+  min-height: 580px;
 }
-.phone-notch {
+.phone-fallback {
   position: absolute;
-  top: 0;
+  top: 50%;
   left: 50%;
-  transform: translateX(-50%);
-  width: 110px;
-  height: 24px;
-  background: #15151c;
-  border-bottom-left-radius: 16px;
-  border-bottom-right-radius: 16px;
-  z-index: 2;
+  width: 62%;
+  max-width: 340px;
+  transform: translate(-50%, -52%);
+  border-radius: 40px;
+  border: 10px solid #15151c;
+  transition: opacity 0.6s ease;
 }
-/* Fenêtre qui rogne la barre de statut du screenshot et empile les slides. */
-.phone-viewport {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  overflow: hidden;
-}
-/* Les 3 slides sont superposées ; on les fait apparaître en fondu. */
-.phone-screen {
+.phone-canvas,
+.phone-stage {
   position: absolute;
   inset: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: contain;       /* garde le ratio exact, pas de zoom flou */
-  object-position: top;
-  display: block;
+}
+.phone-canvas {
   opacity: 0;
-  transition: opacity 0.6s ease;
-  pointer-events: none;
-  -webkit-backface-visibility: hidden; /* évite le rendu flou sur certains navigateurs */
+  transition: opacity 0.9s ease;
 }
-.phone-screen.is-active {
-  opacity: 1;
-}
+.hero-phone.is-ready .phone-canvas { opacity: 1; }
+.hero-phone.is-ready .phone-fallback { opacity: 0; }
 
 /* Points indicateurs sous le téléphone */
 .phone-dots {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
   display: flex;
   justify-content: center;
+  align-items: center;
   gap: 10px;
-  margin-top: 22px;
 }
 .dot-indicator {
   width: 8px;
   height: 8px;
+  padding: 0;
+  border: none;
   border-radius: 50%;
   background: rgba(15, 15, 20, 0.18);
   cursor: pointer;
@@ -391,6 +367,7 @@ section {
   border: 1px solid var(--line);
   border-radius: var(--radius);
   padding: 36px 30px;
+  overflow: hidden;
   opacity: 0;
   transform: translateY(24px);
   transition: opacity 0.6s ease, transform 0.6s ease, box-shadow 0.3s ease;
@@ -402,16 +379,30 @@ section {
 .feature-card:hover {
   box-shadow: 0 20px 50px -20px rgba(15,15,20,0.18);
 }
-.feature-ico {
-  width: 52px;
-  height: 52px;
-  border-radius: 14px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.5rem;
-  background: linear-gradient(135deg, rgba(192,132,252,0.15), rgba(139,92,246,0.15));
-  margin-bottom: 22px;
+/* Aperçu réel de l'app qui "dépasse" en bas de la carte */
+.feature-shot {
+  height: 230px;
+  margin: -36px -30px 28px;
+  padding: 28px 28px 0;
+  border-radius: var(--radius) var(--radius) 0 0;
+  background: linear-gradient(160deg, rgba(236,72,153,0.14), rgba(139,92,246,0.2));
+  overflow: hidden;
+}
+.feature-shot img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+  border-radius: 14px 14px 0 0;
+  box-shadow: 0 18px 40px -12px rgba(76, 29, 149, 0.45);
+  transition: transform 0.5s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+.feature-shot img[src*="book"] {
+  object-position: bottom;
+}
+.feature-card:hover .feature-shot img {
+  transform: translateY(-6px);
 }
 .feature-card h3 {
   font-family: var(--font-display);
@@ -648,9 +639,11 @@ section {
   .hero-actions {
     justify-content: center;
   }
-  .phone {
-    width: 260px;
-    height: 542px;
+  .hero-phone {
+    flex-basis: auto;
+    width: 100%;
+    height: 640px;
+    min-height: 0;
   }
 }
 
