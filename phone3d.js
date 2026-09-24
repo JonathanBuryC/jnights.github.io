@@ -61,7 +61,7 @@ function Phone({ index, onNext, onReady }) {
   // haute qualité du navigateur) et on coupe les mipmaps, source du flou sur le texte.
   // ponytail: taille calculée au montage, pas recalculée au redimensionnement de la fenêtre
   const textures = useMemo(() => {
-    const hPx = Math.min(2532, Math.round(SH * (size.height / viewport.height) * gl.getPixelRatio() * 1.15));
+    const hPx = Math.min(2532, Math.round(SH * (size.height / viewport.height) * gl.getPixelRatio()));
     return images.map((img) => {
       const c = document.createElement("canvas");
       c.height = hPx;
@@ -99,7 +99,7 @@ function Phone({ index, onNext, onReady }) {
     g.rotation.z = Math.sin(t * 0.6) * 0.015 * float;
     g.position.y = THREE.MathUtils.damp(g.position.y, Math.sin(t * 0.9) * 0.04 * float, 4, dt);
     layers.current.forEach((m, i) => {
-      if (m) m.material.opacity = THREE.MathUtils.damp(m.material.opacity, i === index ? 1 : 0, 6, dt);
+      if (m) m.material.opacity = THREE.MathUtils.damp(m.material.opacity, i === index ? 1 : 0, 14, dt);
     });
   });
 
@@ -154,7 +154,9 @@ function App({ container }) {
 
   return h("div", { className: "phone-stage" },
     h(Canvas, {
-        dpr: [1, 2], frameloop: visible ? "always" : "never",
+        // Suréchantillonnage : rendu à 2× la densité de l'écran puis réduit par le
+        // navigateur -> texte de l'écran net malgré l'inclinaison et le flottement.
+        dpr: Math.min(3, devicePixelRatio * 2), frameloop: visible ? "always" : "never",
         camera: { position: [0, 0, 4.5], fov: 30 },
         gl: { antialias: true, alpha: true },
       },
