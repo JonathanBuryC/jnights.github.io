@@ -213,28 +213,38 @@ a {
   border: 10px solid #15151c;
   transition: opacity 0.6s ease;
 }
-.phone-canvas,
-.phone-stage {
-  position: absolute;
-  inset: 0;
+/* Scène 3D fixée à l'écran pendant le hero et les fonctionnalités */
+.story {
+  position: relative;
 }
-.phone-canvas {
+.story-stage {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  margin-bottom: -100vh;
+  z-index: 2;
+  pointer-events: none;
   opacity: 0;
   transition: opacity 0.9s ease;
 }
-.hero-phone.is-ready .phone-canvas { opacity: 1; }
-.hero-phone.is-ready .phone-fallback { opacity: 0; }
+.phone-ready .story-stage { opacity: 1; }
+.phone-ready .phone-fallback { opacity: 0; }
 
-/* Points indicateurs sous le téléphone */
+/* Points indicateurs (verticaux, à droite du téléphone, visibles sans scroller) */
 .phone-dots {
   position: absolute;
-  left: 0;
   right: 0;
-  bottom: 0;
+  top: calc(50vh - 120px);
+  z-index: 3;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
   gap: 10px;
+  transition: opacity 0.4s ease;
+}
+.story-scrolled .phone-dots {
+  opacity: 0;
+  pointer-events: none;
 }
 .dot-indicator {
   width: 8px;
@@ -247,7 +257,7 @@ a {
   transition: all 0.3s ease;
 }
 .dot-indicator.is-active {
-  width: 24px;
+  height: 24px;
   border-radius: 4px;
   background: var(--accent-2);
 }
@@ -360,10 +370,14 @@ section {
 /* ============================================================
    FEATURES
    ============================================================ */
-.features-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
+/* Une étape par écran : le texte à gauche, le téléphone (fixe) à droite */
+.feature-step {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+}
+.feature-step .feature-card {
+  max-width: 440px;
 }
 .feature-card {
   background: rgba(255, 255, 255, 0.62);
@@ -616,8 +630,15 @@ section {
    RESPONSIVE
    ============================================================ */
 @media (max-width: 860px) {
-  .features-grid {
-    grid-template-columns: 1fr;
+  .feature-step {
+    align-items: flex-end;
+    padding-bottom: 6vh;
+  }
+  .feature-step .feature-card {
+    max-width: 100%;
+  }
+  .phone-dots {
+    top: 38%;
   }
   .nav-links a:not(.nav-cta) {
     display: none;
