@@ -15,6 +15,7 @@ const SCREENS = [
 ];
 const SW = 0.92, SH = SW * (2532 / 1170); // écran au ratio exact des captures
 const W = SW + 0.08, H = SH + 0.08, D = 0.1; // châssis
+const FADE_S = 1.4; // durée du fondu entre deux écrans (s)
 const REDUCED = matchMedia("(prefers-reduced-motion: reduce)").matches;
 const pointer = { x: 0, y: 0 };
 addEventListener("pointermove", (e) => {
@@ -54,6 +55,8 @@ function Environment() {
 function Phone({ index, onNext, onReady }) {
   const group = useRef();
   const layers = useRef([]);
+  const fade = useRef({ start: 0, from: 1 });
+  useEffect(() => { fade.current.start = null; }, [index]);
   const { gl, size, viewport } = useThree();
   const images = useLoader(THREE.ImageLoader, SCREENS.map((s) => s.src));
 
@@ -98,16 +101,20 @@ function Phone({ index, onNext, onReady }) {
     g.rotation.x = THREE.MathUtils.damp(g.rotation.x, rx, 3, dt);
     g.rotation.z = Math.sin(t * 0.6) * 0.015 * float;
     g.position.y = THREE.MathUtils.damp(g.position.y, Math.sin(t * 0.9) * 0.04 * float, 4, dt);
-    // Transition : le nouvel écran apparaît en fondu par-dessus l'ancien,
-    // qui reste affiché dessous jusqu'à être entièrement recouvert.
+    // Transition : le nouvel écran apparaît en fondu (ease-in-out) par-dessus
+    // l'ancien, qui reste affiché dessous jusqu'à être entièrement recouvert.
     const active = layers.current[index];
     if (active) {
+      const f = fade.current;
+      if (f.start === null) { f.start = t; f.from = active.material.opacity; }
+      const p = Math.min(1, (t - f.start) / FADE_S);
+      const e = p * p * (3 - 2 * p);
       active.renderOrder = 10;
-      active.material.opacity = THREE.MathUtils.damp(active.material.opacity, 1, 3, dt);
+      active.material.opacity = f.from + (1 - f.from) * e;
       layers.current.forEach((m, i) => {
         if (!m || i === index) return;
         m.renderOrder = i;
-        if (active.material.opacity > 0.995) m.material.opacity = 0;
+        if (p === 1) m.material.opacity = 0;
       });
     }
   });

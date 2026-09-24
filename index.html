@@ -93,6 +93,8 @@
 
   <!-- Features -->
   <section id="features">
+    <!-- Dégradé animé discret (features-bg.js, shadergradient) -->
+    <div class="features-bg" id="featuresBg"></div>
     <div class="container">
       <div class="section-head">
         <div class="section-tag">Ce que vous pouvez faire</div>
@@ -101,17 +103,14 @@
       </div>
       <div class="features-grid">
         <div class="feature-card">
-          <div class="feature-shot"><img src="feature-discover.jpg" alt="Liste des soirées dans l'application" loading="lazy" /></div>
           <h3>Découvrez près de chez vous</h3>
           <p>Parcourez les soirées à venir et filtrez par ville et par tranche d'âge pour trouver ce qui vous correspond.</p>
         </div>
         <div class="feature-card">
-          <div class="feature-shot"><img src="feature-book.jpg" alt="Bouton Prendre sa place" loading="lazy" /></div>
           <h3>Réservez votre place</h3>
           <p>Rejoignez un événement en un geste et gardez vos billets toujours accessibles dans l'application.</p>
         </div>
         <div class="feature-card">
-          <div class="feature-shot"><img src="feature-create.jpg" alt="Page d'un événement avec ses inscrits" loading="lazy" /></div>
           <h3>Créez vos événements</h3>
           <p>Organisateurs : publiez vos soirées, gérez vos participants et développez votre communauté.</p>
         </div>
@@ -156,10 +155,12 @@
         "react-dom/client": "https://esm.sh/react-dom@18.3.1/client?deps=react@18.3.1",
         "three": "https://esm.sh/three@0.169.0",
         "three/addons/": "https://esm.sh/three@0.169.0/examples/jsm/",
-        "@react-three/fiber": "https://esm.sh/@react-three/fiber@8.17.10?deps=react@18.3.1,react-dom@18.3.1,three@0.169.0"
+        "@react-three/fiber": "https://esm.sh/@react-three/fiber@8.17.10?deps=react@18.3.1,react-dom@18.3.1,three@0.169.0",
+        "@shadergradient/react": "https://esm.sh/@shadergradient/react@2.4.20?deps=react@18.3.1,react-dom@18.3.1,three@0.169.0,@react-three/fiber@8.17.10"
       }
     }
   </script>
   <script type="module" src="phone3d.js"></script>
+  <script type="module" src="features-bg.js"></script>
 </body>
 </html>

@@ -198,9 +198,9 @@ a {
 /* Téléphone 3D (phone3d.js) */
 .hero-phone {
   position: relative;
-  flex: 0 0 min(50%, 580px);
-  height: min(120vh, 1200px);
-  min-height: 860px;
+  flex: 0 0 min(48%, 560px);
+  height: min(112vh, 1120px);
+  min-height: 800px;
 }
 .phone-fallback {
   position: absolute;
@@ -366,11 +366,12 @@ section {
   gap: 24px;
 }
 .feature-card {
-  background: var(--bg-alt);
-  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.62);
+  -webkit-backdrop-filter: blur(18px);
+  backdrop-filter: blur(18px);
+  border: 1px solid rgba(255, 255, 255, 0.8);
   border-radius: var(--radius);
   padding: 36px 30px;
-  overflow: hidden;
   opacity: 0;
   transform: translateY(24px);
   transition: opacity 0.6s ease, transform 0.6s ease, box-shadow 0.3s ease;
@@ -382,30 +383,26 @@ section {
 .feature-card:hover {
   box-shadow: 0 20px 50px -20px rgba(15,15,20,0.18);
 }
-/* Aperçu réel de l'app qui "dépasse" en bas de la carte */
-.feature-shot {
-  height: 230px;
-  margin: -36px -30px 28px;
-  padding: 28px 28px 0;
-  border-radius: var(--radius) var(--radius) 0 0;
-  background: linear-gradient(160deg, rgba(236,72,153,0.14), rgba(139,92,246,0.2));
+/* Fond dégradé de la section (canvas shadergradient), fondu en haut et en bas */
+#features {
+  position: relative;
   overflow: hidden;
 }
-.feature-shot img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: top;
-  border-radius: 14px 14px 0 0;
-  box-shadow: 0 18px 40px -12px rgba(76, 29, 149, 0.45);
-  transition: transform 0.5s cubic-bezier(0.2, 0.7, 0.2, 1);
+#features > .container {
+  position: relative;
+  z-index: 1;
 }
-.feature-shot img[src*="book"] {
-  object-position: bottom;
+.features-bg {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 1.2s ease;
+  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 25%, #000 75%, transparent);
+  mask-image: linear-gradient(to bottom, transparent, #000 25%, #000 75%, transparent);
+  pointer-events: none;
 }
-.feature-card:hover .feature-shot img {
-  transform: translateY(-6px);
+.features-bg.is-ready {
+  opacity: 1;
 }
 .feature-card h3 {
   font-family: var(--font-display);
@@ -647,7 +644,7 @@ section {
   .hero-phone {
     flex-basis: auto;
     width: 100%;
-    height: min(180vw, 960px);
+    height: min(168vw, 900px);
     min-height: 0;
   }
 }
