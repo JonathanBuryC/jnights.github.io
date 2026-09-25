@@ -71,7 +71,8 @@ function initSmoothScroll() {
       const target = document.querySelector(id);
       if (target) {
         e.preventDefault();
-        target.scrollIntoView({ behavior: "smooth", block: "start" });
+        // une étape du téléphone : on la centre, c'est là que l'écran correspondant est de face
+        target.scrollIntoView({ behavior: "smooth", block: target.classList.contains("feature-step") ? "center" : "start" });
       }
     });
   });

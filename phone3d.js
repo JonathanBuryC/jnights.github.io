@@ -56,6 +56,7 @@ const POSES = {
 const DUR = { heroToBack: 1, toEdge: 0.8, toFace: 0.8, hold: 4, faceToEdge: 0.7, edgeToBack: 0.7, tilt: 0.9, turn: 0.9, settle: 0.6 };
 const SHEET = true; // fenêtre de filtres qui monte dans l'écran pendant le palier 1
 const SCRUB = 0.6; // lissage du scrub (s)
+const SCRUB_MOBILE = 0.2; // mobile : suivi plus direct, moins « flottant »
 const MOBILE_MAX = 767; // en dessous : téléphone centré, plus petit, texte en dessous
 const REVEAL_EXTRA = 0.2; // scroll libre avant que le téléphone bouge (fraction de la hauteur d'écran)
 
@@ -139,7 +140,7 @@ function initScroll(storyEl, steps, placeholder) {
     const t = timeAt(scrollY);
     S.p = t / tl.duration();
     document.documentElement.classList.toggle("story-scrolled", S.p > 0.01);
-    gsap.to(tl, { time: t, duration: SCRUB, ease: "power3.out", overwrite: true });
+    gsap.to(tl, { time: t, duration: innerWidth > MOBILE_MAX ? SCRUB : SCRUB_MOBILE, ease: "power3.out", overwrite: true });
   };
   ScrollTrigger.create({ trigger: storyEl, start: "top top", end: "bottom bottom", onUpdate: update, onRefresh: () => { measure(); update(); } });
   measure();
@@ -220,6 +221,7 @@ function Phone({ index, onReady }) {
   const images = useLoader(THREE.ImageLoader, SCREENS.map((s) => s.src));
   const logo = useLoader(THREE.TextureLoader, "logo.png");
   const placeholder = useMemo(() => document.getElementById("phone3d"), []);
+  const texts = useMemo(() => [...document.querySelectorAll(".section-head, .feature-text")], []);
 
   // Hero : suit l'emplacement #phone3d pendant la révélation, puis reste fixe à l'écran.
   const heroPose = () => {
@@ -235,7 +237,8 @@ function Phone({ index, onReady }) {
   const seqPose = () => {
     const vw = viewport.width, vh = viewport.height;
     if (size.width > MOBILE_MAX) return { x: S.x * vw, y: S.y * vh, s: (S.s * vh) / H };
-    return { x: 0, y: (0.15 + S.y * 0.5) * vh, s: Math.min((S.s * 0.6 * vh) / H, (0.72 * vw) / W) };
+    // mobile : petit, en haut de l'écran, pour laisser la moitié basse aux textes
+    return { x: 0, y: (0.23 + S.y * 0.3) * vh, s: Math.min((S.s * 0.45 * vh) / H, (0.6 * vw) / W) };
   };
 
   // Netteté : on réduit les captures à la taille réelle d'affichage (redimensionnement
@@ -280,17 +283,28 @@ function Phone({ index, onReady }) {
 
   useFrame((state, dt) => {
     const g = group.current, t = state.clock.elapsedTime, float = REDUCED ? 0 : 1;
+    const mobile = size.width <= MOBILE_MAX;
     const hp = heroPose(), sp = seqPose(), k = S.hero, lerp = (a, b) => b + (a - b) * k;
-    // léger flottement qui suit le scroll + respiration au repos
-    const drift = (Math.sin(S.p * Math.PI * 8) * 0.012 + Math.sin(t * 0.9) * 0.008) * viewport.height * float;
+    // léger flottement qui suit le scroll + respiration au repos (pas sur mobile : trop « flottant »)
+    const drift = mobile ? 0 : (Math.sin(S.p * Math.PI * 8) * 0.012 + Math.sin(t * 0.9) * 0.008) * viewport.height * float;
 
-    const damp = (v, target, l = 6) => THREE.MathUtils.damp(v, target, l, dt);
+    const damp = (v, target, l = 6) => THREE.MathUtils.damp(v, target, mobile ? l * 2.5 : l, dt);
     g.position.x = damp(g.position.x, lerp(hp.x, sp.x));
     g.position.y = damp(g.position.y, lerp(hp.y, sp.y) + drift);
     g.scale.setScalar(damp(g.scale.x, lerp(hp.s, sp.s)));
     g.rotation.y = damp(g.rotation.y, S.ry * DEG + (pointer.x * 0.12 + Math.sin(t * 0.45) * 0.03) * float, 5);
     g.rotation.x = damp(g.rotation.x, 0.04 + pointer.y * 0.06 * float, 3);
     g.rotation.z = damp(g.rotation.z, S.rz * DEG, 5);
+
+    // Mobile : un texte s'efface dès qu'il remonte sous le téléphone (il ne passe jamais dessous).
+    if (mobile) {
+      const pxPerUnit = size.height / viewport.height;
+      const phoneBottom = size.height / 2 - (g.position.y - (g.scale.x * H) / 2) * pxPerUnit;
+      texts.forEach((el) => {
+        const v = Math.min(1, Math.max(0, (el.getBoundingClientRect().top - phoneBottom - 8) / 70));
+        el.style.setProperty("--fade", v.toFixed(2));
+      });
+    }
 
     // Fenêtre de filtres : on recompose l'écran Découvrir seulement quand elle bouge.
     if (Math.abs(S.sheet - cur.current.sheet) > 0.002) {
@@ -386,6 +400,8 @@ function App({ placeholder, storyEl }) {
         dpr: Math.min(3, devicePixelRatio * 2), frameloop: visible ? "always" : "never",
         camera: { position: [0, 0, 4.5], fov: 30 },
         gl: { antialias: true, alpha: true },
+        // la scène couvre tout l'écran : elle ne doit pas bloquer les clics sur la page
+        style: { pointerEvents: "none" },
       },
       h(Environment),
       h("directionalLight", { position: [-2, 3, 2], intensity: 1.2 }),

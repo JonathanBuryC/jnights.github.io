@@ -704,9 +704,18 @@ section {
 @media (max-width: 767px) {
   .feature-step,
   .step-right {
+    min-height: 100vh;
     justify-content: flex-start;
     align-items: flex-end;
     padding-bottom: 6vh;
+  }
+  /* opacité pilotée par phone3d.js : le texte s'efface sous le téléphone */
+  .section-head,
+  .feature-text,
+  .feature-text.visible {
+    opacity: var(--fade, 1);
+    transform: none;
+    transition: none;
   }
   .step-center .feature-text {
     min-height: 0;
@@ -718,8 +727,15 @@ section {
     font-size: clamp(2rem, 9vw, 2.6rem);
     margin-bottom: 14px;
   }
-  .feature-points {
+  .feature-text {
+    width: 100%;
+    min-width: 0;
+  }
+  .feature-points,
+  .step-center .feature-points {
     margin-top: 14px;
+    width: auto;
+    max-width: 100%;
   }
 }
 
