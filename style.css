@@ -702,12 +702,14 @@ section {
 
 /* Mobile : téléphone centré en haut, texte en dessous pour ne pas être masqué */
 @media (max-width: 767px) {
+  /* sections plus courtes, texte juste sous le téléphone : les textes arrivent plus tôt */
   .feature-step,
   .step-right {
-    min-height: 100vh;
+    min-height: 70vh;
     justify-content: flex-start;
-    align-items: flex-end;
-    padding-bottom: 6vh;
+    align-items: flex-start;
+    padding-top: 38vh;
+    padding-bottom: 0;
   }
   /* masque piloté par phone3d.js : la partie du texte sous le téléphone s'efface */
   .section-head,

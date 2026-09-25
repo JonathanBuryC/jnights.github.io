@@ -65,6 +65,7 @@ const W = SW + 0.08, H = SH + 0.08, D = 0.1; // châssis
 const FADE_S = 1.4; // durée du fondu entre deux écrans dans le hero (s)
 const FADE_MOBILE_S = 0.6; // mobile : fondu entre deux paliers (le téléphone ne se retourne plus)
 const FIRST_TURN_END = 340; // ry du palier 1 : sur mobile, seul ce premier tour complet est joué
+const CALM_SWAY = 7; // mobile, ensuite : amplitude de l'oscillation gauche/droite (degrés)
 const REDUCED = matchMedia("(prefers-reduced-motion: reduce)").matches;
 const DEG = Math.PI / 180;
 const pointer = { x: 0, y: 0 };
@@ -239,8 +240,10 @@ function Phone({ index, onReady }) {
   const seqPose = () => {
     const vw = viewport.width, vh = viewport.height;
     if (size.width > MOBILE_MAX) return { x: S.x * vw, y: S.y * vh, s: (S.s * vh) / H };
-    // mobile : petit, en haut de l'écran, pour laisser la moitié basse aux textes
-    return { x: 0, y: (0.23 + S.y * 0.3) * vh, s: Math.min((S.s * 0.45 * vh) / H, (0.6 * vw) / W) };
+    // mobile : petit, en haut de l'écran, pour laisser la moitié basse aux textes ;
+    // après le premier tour il ne se déplace plus (pose fixe du palier)
+    const settled = S.ry > FIRST_TURN_END, sy = settled ? 0 : S.y, ss = settled ? 0.8 : S.s;
+    return { x: 0, y: (0.23 + sy * 0.3) * vh, s: Math.min((ss * 0.45 * vh) / H, (0.6 * vw) / W) };
   };
 
   // Netteté : on réduit les captures à la taille réelle d'affichage (redimensionnement
@@ -298,12 +301,13 @@ function Phone({ index, onReady }) {
     g.position.x = damp(g.position.x, lerp(hp.x, sp.x));
     g.position.y = damp(g.position.y, lerp(hp.y, sp.y) + drift);
     g.scale.setScalar(damp(g.scale.x, lerp(hp.s, sp.s)));
-    // mobile, après le premier tour : plus de 360°, juste un léger balancement 3D
+    // mobile, après le premier tour : plus de 360° ni d'inclinaison, juste une petite
+    // oscillation pour qu'on sente la 3D
     const calm = mobile && S.ry > FIRST_TURN_END;
-    const ry = calm ? FIRST_TURN_END + 22 * Math.sin(((S.ry - FIRST_TURN_END) / 360) * 2 * Math.PI) : S.ry;
+    const ry = calm ? FIRST_TURN_END + CALM_SWAY * Math.sin(((S.ry - FIRST_TURN_END) / 360) * 2 * Math.PI) : S.ry;
     g.rotation.y = damp(g.rotation.y, ry * DEG + (pointer.x * 0.12 + Math.sin(t * 0.45) * 0.03) * float, 5);
     g.rotation.x = damp(g.rotation.x, 0.04 + pointer.y * 0.06 * float, 3);
-    g.rotation.z = damp(g.rotation.z, S.rz * (calm ? 0.4 : 1) * DEG, 5);
+    g.rotation.z = damp(g.rotation.z, calm ? 0 : S.rz * DEG, 5);
 
     // Mobile : la partie d'un texte qui remonte sous le téléphone s'efface ligne à ligne
     // (masque CSS dont la limite --cut suit le bas du téléphone).
