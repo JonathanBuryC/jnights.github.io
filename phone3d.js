@@ -65,6 +65,7 @@ const W = SW + 0.08, H = SH + 0.08, D = 0.1; // châssis
 const FADE_S = 1.4; // durée du fondu entre deux écrans dans le hero (s)
 const FADE_MOBILE_S = 0.6; // mobile : fondu entre deux paliers (le téléphone ne se retourne plus)
 const FIRST_TURN_END = 340; // ry du palier 1 : sur mobile, seul ce premier tour complet est joué
+const MOBILE_TEXT_AT = 0.56; // mobile : hauteur d'écran (fraction) où arrive le haut du texte au palier
 const CALM_SWAY = 7; // mobile, ensuite : amplitude de l'oscillation gauche/droite (degrés)
 const REDUCED = matchMedia("(prefers-reduced-motion: reduce)").matches;
 const DEG = Math.PI / 180;
@@ -129,8 +130,15 @@ function initScroll(storyEl, steps, placeholder) {
     const top = (el) => el.getBoundingClientRect().top + scrollY;
     reveal.d0 = Math.max(0, top(placeholder) + placeholder.offsetHeight + 24 - innerHeight) + innerHeight * REVEAL_EXTRA;
     anchors = [[0, 0], [reveal.d0, 0]];
-    steps.forEach((el, i) => anchors.push([top(el) + el.offsetHeight / 2 - innerHeight / 2, tl.labels["p" + (i + 1) + "mid"]]));
-    anchors.push([top(storyEl) + storyEl.offsetHeight - innerHeight, tl.duration()]);
+    // ordinateur : palier au centre de sa section ; mobile : palier quand le texte arrive
+    // juste sous le téléphone (sections courtes, les textes s'enchaînent sans vide)
+    const mobile = innerWidth <= MOBILE_MAX;
+    steps.forEach((el, i) => anchors.push([
+      mobile ? top(el.querySelector(".feature-text")) - innerHeight * MOBILE_TEXT_AT : top(el) + el.offsetHeight / 2 - innerHeight / 2,
+      tl.labels["p" + (i + 1) + "mid"],
+    ]));
+    const end = top(storyEl) + storyEl.offsetHeight - innerHeight;
+    anchors.push([Math.max(end, anchors[anchors.length - 1][0] + 1), tl.duration()]);
   };
   const timeAt = (y) => {
     for (let i = 0; i < anchors.length - 1; i++) {
