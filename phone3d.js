@@ -2,7 +2,7 @@
  * Téléphone 3D (React Three Fiber + GSAP ScrollTrigger, sans build : modules via importmap).
  * Hero : calé sur #phone3d, écrans en défilement auto. Au scroll, une timeline GSAP
  * (réglages : POSES / DUR ci-dessous) l'anime de dos → tranche → face écran pour chaque
- * section .feature-step (paliers à droite, à gauche puis au milieu) ; l'écran ne change
+ * section .feature-step (paliers à droite, à gauche puis au centre-droit) ; l'écran ne change
  * que quand il est de dos (invisible).
  * Si WebGL ou le CDN échoue, l'image .phone-fallback reste affichée.
  */
@@ -46,10 +46,10 @@ const POSES = {
   face2: { x: -0.2, y: -0.01, s: 0.8, ry: 740, rz: 0 },     // palier 2 À GAUCHE, 3/4 inversé (+20°)
   face2Up: { y: 0.04 },
   edge3: { x: -0.14, y: 0.02, s: 0.8, ry: 810, rz: 12 },    // tranche
-  back3: { x: -0.06, y: -0.14, s: 0.86, ry: 900, rz: 15 },  // de dos, revient vers le milieu
-  edge3b: { x: 0, y: -0.14, s: 0.78, ry: 990, rz: 6 },      // tranche
-  face3: { x: 0, y: -0.13, s: 0.72, ry: 1080, rz: 0 },      // palier 3 AU MILIEU, sous le titre
-  face3Up: { y: -0.1 },
+  back3: { x: -0.02, y: -0.12, s: 0.86, ry: 900, rz: 15 },  // de dos, revient vers le milieu
+  edge3b: { x: 0.08, y: -0.06, s: 0.8, ry: 990, rz: 6 },    // tranche
+  face3: { x: 0.12, y: -0.02, s: 0.78, ry: 1080, rz: 0 },   // palier 3 AU CENTRE-DROIT, à côté du texte
+  face3Up: { y: 0.03 },
 };
 // Durées relatives de chaque phase (seul le rapport entre elles compte).
 // hold = palier face écran : c'est lui qui laisse le temps de lire.

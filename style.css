@@ -378,7 +378,7 @@ section {
    FEATURES
    ============================================================ */
 /* Une étape par palier du téléphone : grand titre + texte, du côté opposé au téléphone
-   (palier 1 : téléphone à droite, 2 : à gauche, 3 : au milieu, titre en haut) */
+   (palier 1 : téléphone à droite, 2 : à gauche, 3 : au centre-droit) */
 .feature-step {
   min-height: 130vh;
   display: flex;
@@ -446,19 +446,10 @@ section {
   border-radius: 50%;
   background: var(--accent-2) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12.5l4.5 4.5L19 7.5'/%3E%3C/svg%3E") center / 11px no-repeat;
 }
-/* Palier 3 : titre en haut, détail en bas à gauche, téléphone au centre */
-.step-center .feature-text {
-  max-width: none;
-  width: 100%;
-  min-height: 100vh;
-  padding: 12vh 0 8vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
+/* Palier 3 : texte à gauche, téléphone au centre-droit */
 .step-center .feature-detail,
 .step-center .feature-points {
-  max-width: 380px;
+  max-width: 400px;
 }
 
 /* Fond dégradé de toute la page (canvas shadergradient fixe, derrière le contenu) */
@@ -514,9 +505,13 @@ section {
 /* ============================================================
    FOOTER
    ============================================================ */
+/* fond clair pour rester lisible sur le dégradé */
 .footer {
   border-top: 1px solid var(--line);
   padding: 56px 0 40px;
+  background: rgba(250, 248, 245, 0.9);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
 }
 .footer-inner {
   display: flex;
@@ -544,7 +539,8 @@ section {
 }
 .footer-links a {
   font-size: 0.92rem;
-  color: var(--ink-soft);
+  color: var(--ink-strong);
+  font-weight: 500;
   transition: color 0.2s ease;
 }
 .footer-links a:hover {
