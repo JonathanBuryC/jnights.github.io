@@ -63,6 +63,8 @@ const REVEAL_EXTRA = 0.2; // scroll libre avant que le téléphone bouge (fracti
 const SW = 0.92, SH = SW * (2532 / 1170); // écran au ratio exact des captures
 const W = SW + 0.08, H = SH + 0.08, D = 0.1; // châssis
 const FADE_S = 1.4; // durée du fondu entre deux écrans dans le hero (s)
+const FADE_MOBILE_S = 0.6; // mobile : fondu entre deux paliers (le téléphone ne se retourne plus)
+const FIRST_TURN_END = 340; // ry du palier 1 : sur mobile, seul ce premier tour complet est joué
 const REDUCED = matchMedia("(prefers-reduced-motion: reduce)").matches;
 const DEG = Math.PI / 180;
 const pointer = { x: 0, y: 0 };
@@ -284,7 +286,11 @@ function Phone({ index, onReady }) {
   useFrame((state, dt) => {
     const g = group.current, t = state.clock.elapsedTime, float = REDUCED ? 0 : 1;
     const mobile = size.width <= MOBILE_MAX;
-    const hp = heroPose(), sp = seqPose(), k = S.hero, lerp = (a, b) => b + (a - b) * k;
+    // mobile : le téléphone rapetisse et monte dès le début du scroll, pour laisser le titre
+    // « Tout ce qu'il faut… » visible plus longtemps
+    const hk = Math.min(1, Math.max(0, (S.hero - 0.4) / 0.6));
+    const k = mobile ? hk * hk * (3 - 2 * hk) : S.hero;
+    const hp = heroPose(), sp = seqPose(), lerp = (a, b) => b + (a - b) * k;
     // léger flottement qui suit le scroll + respiration au repos (pas sur mobile : trop « flottant »)
     const drift = mobile ? 0 : (Math.sin(S.p * Math.PI * 8) * 0.012 + Math.sin(t * 0.9) * 0.008) * viewport.height * float;
 
@@ -292,17 +298,20 @@ function Phone({ index, onReady }) {
     g.position.x = damp(g.position.x, lerp(hp.x, sp.x));
     g.position.y = damp(g.position.y, lerp(hp.y, sp.y) + drift);
     g.scale.setScalar(damp(g.scale.x, lerp(hp.s, sp.s)));
-    g.rotation.y = damp(g.rotation.y, S.ry * DEG + (pointer.x * 0.12 + Math.sin(t * 0.45) * 0.03) * float, 5);
+    // mobile, après le premier tour : plus de 360°, juste un léger balancement 3D
+    const calm = mobile && S.ry > FIRST_TURN_END;
+    const ry = calm ? FIRST_TURN_END + 22 * Math.sin(((S.ry - FIRST_TURN_END) / 360) * 2 * Math.PI) : S.ry;
+    g.rotation.y = damp(g.rotation.y, ry * DEG + (pointer.x * 0.12 + Math.sin(t * 0.45) * 0.03) * float, 5);
     g.rotation.x = damp(g.rotation.x, 0.04 + pointer.y * 0.06 * float, 3);
-    g.rotation.z = damp(g.rotation.z, S.rz * DEG, 5);
+    g.rotation.z = damp(g.rotation.z, S.rz * (calm ? 0.4 : 1) * DEG, 5);
 
-    // Mobile : un texte s'efface dès qu'il remonte sous le téléphone (il ne passe jamais dessous).
+    // Mobile : la partie d'un texte qui remonte sous le téléphone s'efface ligne à ligne
+    // (masque CSS dont la limite --cut suit le bas du téléphone).
     if (mobile) {
       const pxPerUnit = size.height / viewport.height;
       const phoneBottom = size.height / 2 - (g.position.y - (g.scale.x * H) / 2) * pxPerUnit;
       texts.forEach((el) => {
-        const v = Math.min(1, Math.max(0, (el.getBoundingClientRect().top - phoneBottom - 8) / 70));
-        el.style.setProperty("--fade", v.toFixed(2));
+        el.style.setProperty("--cut", Math.round(phoneBottom + 8 - el.getBoundingClientRect().top) + "px");
       });
     }
 
@@ -316,15 +325,16 @@ function Phone({ index, onReady }) {
     }
 
     // Écran : dans le hero, fondu du défilement auto ; pendant la séquence, changement
-    // instantané posé dans la timeline aux moments où le téléphone est de dos.
+    // instantané posé dans la timeline aux moments où le téléphone est de dos
+    // (sur mobile après le premier tour, fondu puisqu'il ne se retourne plus).
     const target = S.screen < 0 ? index : S.screen;
     const c = cur.current, L = layers.current;
     if (target !== c.shown) {
       c.shown = target;
-      c.start = S.screen < 0 ? t : -1;
+      c.start = S.screen < 0 || calm ? t : -1;
       c.from = L[target] ? L[target].material.opacity : 0;
     }
-    const p = c.start < 0 ? 1 : Math.min(1, (t - c.start) / FADE_S);
+    const p = c.start < 0 ? 1 : Math.min(1, (t - c.start) / (S.screen < 0 ? FADE_S : FADE_MOBILE_S));
     L.forEach((m, i) => {
       if (!m) return;
       if (i === target) { m.renderOrder = 10; m.material.opacity = c.from + (1 - c.from) * p * p * (3 - 2 * p); }

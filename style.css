@@ -709,13 +709,15 @@ section {
     align-items: flex-end;
     padding-bottom: 6vh;
   }
-  /* opacité pilotée par phone3d.js : le texte s'efface sous le téléphone */
+  /* masque piloté par phone3d.js : la partie du texte sous le téléphone s'efface */
   .section-head,
   .feature-text,
   .feature-text.visible {
-    opacity: var(--fade, 1);
+    opacity: 1;
     transform: none;
     transition: none;
+    -webkit-mask-image: linear-gradient(to bottom, transparent var(--cut, -100px), #000 calc(var(--cut, -100px) + 48px));
+    mask-image: linear-gradient(to bottom, transparent var(--cut, -100px), #000 calc(var(--cut, -100px) + 48px));
   }
   .step-center .feature-text {
     min-height: 0;
